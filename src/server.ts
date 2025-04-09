@@ -1,2 +1,1 @@
-import express from "express";
-console.log("Aaaaaaaa");
+console.log("SERVER STARTED");
