@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { T } from '../libs/types/common';
+import { T } from 'src/libs/types/common';
 
 const sellerController: T = {};
 sellerController.goHome = (req: Request, res: Response) => {
