@@ -1,9 +1,9 @@
 import express from 'express';
 import path from 'path';
 import router from './router';
-import routerAdmin from './routerAdmin';
 import morgan from 'morgan';
 import { MORGAM_FORMAT } from './libs/config';
+import routerAdmin from './router-admin';
 
 /** 1-ENTRANCE **/
 const app = express();

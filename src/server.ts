@@ -1,7 +1,7 @@
-import dotenv from 'dotenv';
-dotenv.config();
+import dotenv from 'dotenv'; //.env fayllarini o`qishni taminlaydi
+dotenv.config(); //dotenv fayllarini ochib beradi
 
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'; //Node.js-da MongoDB bilan ishlashni osonlashtiruvchi kutubxona.
 import app from './app';
 
 mongoose
