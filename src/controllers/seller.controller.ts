@@ -10,7 +10,7 @@ const sellerController: T = {};
 sellerController.goHome = (req: Request, res: Response) => {
   try {
     console.log("goHome");
-    res.send("Home Page");
+    res.render("home");
   } catch (err) {
     console.log("Error, goHome:", err);
   }
@@ -18,7 +18,7 @@ sellerController.goHome = (req: Request, res: Response) => {
 
 sellerController.getSignup = (req: Request, res: Response) => {
   try {
-    res.send("Signup Page");
+    res.render("Signup");
   } catch (err) {
     console.log("Error, getSignup:", err);
   }
@@ -27,7 +27,7 @@ sellerController.getSignup = (req: Request, res: Response) => {
 
 sellerController.getLogin = (req: Request, res: Response) => {
   try {
-    res.send("Login Page");
+    res.render("Login");
   } catch (err) {
     console.log("Error, getLogin:", err);
   }
