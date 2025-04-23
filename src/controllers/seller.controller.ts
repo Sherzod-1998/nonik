@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Request, Response } from 'express';
+import { request, Request, Response } from 'express';
 import { T } from '../libs/types/common';
 import MemberService from '../models/Member.service';
 import { AdminRequest, LoginInput, MemberInput } from '../libs/types/member';
 import { MemberType } from '../libs/enums/member.enum';
-import { Message } from '../libs/Errors';
+import Errors, { Message } from '../libs/Errors';
 
 const memberService = new MemberService();
 
@@ -23,6 +23,7 @@ sellerController.getSignup = (req: Request, res: Response) => {
 		res.render('signup');
 	} catch (err) {
 		console.log('Error, getSignup:', err);
+		res.redirect('/admin');
 	}
 };
 
@@ -31,6 +32,7 @@ sellerController.getLogin = (req: Request, res: Response) => {
 		res.render('Login');
 	} catch (err) {
 		console.log('Error, getLogin:', err);
+		res.redirect('/admin');
 	}
 };
 
@@ -47,6 +49,8 @@ sellerController.processSignup = async (req: AdminRequest, res: Response) => {
 		});
 	} catch (err) {
 		console.log('Error, processSignup:', err);
+		const message = err instanceof Errors ? err.message : Message.SOMETHING_WENT_WRONG;
+		res.send(`<script> alert("${message}"); window.location.replace('admin/signup') </script>`);
 		res.send(err);
 	}
 };
@@ -66,13 +70,26 @@ sellerController.processLogin = async (req: AdminRequest, res: Response) => {
 	}
 };
 
+sellerController.logout = async (req: AdminRequest, res: Response) => {
+	try {
+		console.log('logout');
+		req.session.destroy(function () {
+			res.redirect('/admin');
+		});
+	} catch (err) {
+		console.log('Error on router/processLogin', err);
+		const message = err instanceof Errors ? err.message : Message.SOMETHING_WENT_WRONG;
+		res.redirect('/admin');
+	}
+};
+
 sellerController.checkAuthSession = async (req: AdminRequest, res: Response) => {
 	try {
 		console.log('checkAuthSession');
 		if (req.session?.member) {
-			res.send('<script> alert(${req.session.member.memberNick}) </script>');
+			res.send(`<script> alert("${req.session.member.memberNick}")</script>`);
 		} else {
-			res.send('<script> alert("${Message.NOT_AUTHENTICATED}") </script>');
+			res.send(`<script> alert("${Message.NOT_AUTHENTICATED}")</script>`);
 		}
 	} catch (err) {
 		console.log('Error, checkAuthSession:', err);
