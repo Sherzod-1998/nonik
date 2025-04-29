@@ -1,4 +1,5 @@
-import { Request, Response } from 'express';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { NextFunction, Request, Response } from 'express';
 import { T } from '../libs/types/common';
 import MemberService from '../models/Member.service';
 import { AdminRequest, LoginInput, MemberInput } from '../libs/types/member';
@@ -40,7 +41,7 @@ sellerController.processSignup = async (req: AdminRequest, res: Response) => {
 		console.log('processSignUp');
 
 		const newMember: MemberInput = req.body;
-		newMember.memberType = MemberType.RESTAURANT;
+		newMember.memberType = MemberType.SELLER;
 		const result = await memberService.processSignup(newMember);
 		// TODO SESSIONS
 		req.session.member = result;
@@ -97,6 +98,16 @@ sellerController.checkAuthSession = async (req: AdminRequest, res: Response) => 
 	} catch (err) {
 		console.log('Error, checkAuthSession:', err);
 		res.send(err);
+	}
+};
+
+sellerController.verifySeller = (req: AdminRequest, res: Response, next: NextFunction) => {
+	if (req.session?.member?.memberType === MemberType.SELLER) {
+		req.member = req.session.member;
+		next();
+	} else {
+		const message = Message.NOT_AUTHENTICATED;
+		res.send(`<script> alert("${message}"); window.location.replace('/admin/login');</script>`);
 	}
 };
 
