@@ -1,5 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
-import { BrandCollection, ProductStatus } from '../libs/enums/product.enum';
+import { BrandCollection, ProductCollection, ProductStatus } from '../libs/enums/product.enum';
 
 const productSchema = new Schema(
 	{
@@ -8,9 +8,15 @@ const productSchema = new Schema(
 			enum: ProductStatus,
 			default: ProductStatus.PAUSE,
 		},
-		BrandCollection: {
+		brandCollection: {
 			type: String,
 			enum: BrandCollection,
+			required: true,
+		},
+
+		productCollection: {
+			type: String,
+			enum: ProductCollection,
 			required: true,
 		},
 

@@ -21,4 +21,5 @@ export enum BrandCollection {
 	ANUA = 'ANUA',
 	COSRX = 'COSRX',
 	HERA = 'HERA',
+	OTHER = 'OTHER',
 }

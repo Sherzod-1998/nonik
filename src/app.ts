@@ -1,13 +1,15 @@
+import cors from 'cors';
 import express from 'express';
 import path from 'path';
 import router from './router';
+import routerAdmin from './router-admin';
 import morgan from 'morgan';
 import { MORGAM_FORMAT } from './libs/config';
-import routerAdmin from './router-admin';
-import { T } from './libs/types/common';
+import cookieParser from 'cookie-parser';
 
 import session from 'express-session';
 import ConnectMongoDB from 'connect-mongodb-session';
+import { T } from './libs/types/common';
 const MongoDBStore = ConnectMongoDB(session);
 const store = new MongoDBStore({
 	uri: String(process.env.MONGO_URL),
@@ -16,10 +18,19 @@ const store = new MongoDBStore({
 
 /** 1-ENTRANCE **/
 const app = express();
+
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(morgan(MORGAM_FORMAT));
+app.use('/uploads', express.static('./uploads'));
+app.use(express.urlencoded({ extended: true })); //traditional api
+app.use(express.json()); //REST API
+app.use(
+	cors({
+		credentials: true,
+		origin: true,
+	}),
+);
+app.use(cookieParser());
+app.use(morgan(MORGAM_FORMAT)); //HTTP so'rovlarini logga yozish. REST API
 
 /** 2-SESSIONS **/
 app.use(
