@@ -34,5 +34,9 @@ routerAdmin.post('/product/:id',
      productController.updateChosenProduct);
 
 // User
+routerAdmin.get(
+    "/user/all", 
+    sellerController.verifySeller, 
+    sellerController.getUsers);
 /** User */
 export default routerAdmin;
