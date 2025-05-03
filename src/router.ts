@@ -6,5 +6,6 @@ import productController from './controllers/product.controller';
 const router = express.Router();
 
 router.get('/member/seller', memberController.getSeller);
+router.post('/member/signup', memberController.signup);
 
 export default router;
