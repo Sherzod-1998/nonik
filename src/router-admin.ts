@@ -28,7 +28,10 @@ routerAdmin.post("/product/create",
     makeUploader("products").array("productImages", 5),
     productController.createNewProduct);
 
-routerAdmin.post('/product/:id', sellerController.verifySeller, productController.updateChosenProduct);
+routerAdmin.post('/product/:id',
+     sellerController.verifySeller, 
+     makeUploader("products").array("productImage", 5),
+     productController.updateChosenProduct);
 
 // User
 /** User */
