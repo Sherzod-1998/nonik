@@ -38,27 +38,18 @@ class MemberService {
 	}
 
 	public async login(input: LoginInput): Promise<Member> {
-		// TODO: Consider member status later
-		// Foydalanuvchini login va parolga ko'ra qidirish
 		const member = await this.memberModel
-			.findOne(
-				{ memberNick: input.memberNick }, // Foydalanuvchining loginini tekshirish
-				{ memberNick: 1, memberPassword: 1 }, // Login va parolni olish
-			)
+			.findOne({ memberNick: input.memberNick }, { memberNick: 1, memberPassword: 1 })
 			.exec();
-
-		// Agar foydalanuvchi topilmasa, xatolik yuborish
 		if (!member) {
 			throw new Errors(HttpCode.NOT_FOUND, Message.NO_MEMBER_NICK);
 		}
 
-		// Foydalanuvchining kiritgan parolini xeshlangan parol bilan solishtirish
 		const isMatch = await bcrypt.compare(input.memberPassword, member.memberPassword);
 		if (!isMatch) {
 			throw new Errors(HttpCode.UNAUTHORIZED, Message.WRONG_PASSWORD);
 		}
 
-		// Agar login muvaffaqiyatli bo'lsa, foydalanuvchini to'liq ma'lumot bilan qaytarish
 		return await this.memberModel.findById(member._id).lean().exec();
 	}
 
@@ -78,7 +69,7 @@ class MemberService {
 	}
 
 	/** SPA */
-
+	/**SSR */
 	public async processSignup(input: MemberInput): Promise<Member> {
 		const exist = await this.memberModel.findOne({ memberType: MemberType.SELLER }).exec();
 
@@ -118,5 +109,6 @@ class MemberService {
 		//  return result;
 	}
 }
+/**SSR */
 
 export default MemberService;
