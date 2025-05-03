@@ -38,5 +38,10 @@ routerAdmin.get(
     "/user/all", 
     sellerController.verifySeller, 
     sellerController.getUsers);
+
+    routerAdmin.post(
+        "/user/edit", 
+        sellerController.verifySeller, 
+        sellerController.updateChosenUser);
 /** User */
 export default routerAdmin;
