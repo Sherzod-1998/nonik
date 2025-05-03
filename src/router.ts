@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import express from 'express';
-const router = express.Router();
 import memberController from './controllers/member.controller';
+import uploader from './libs/utils/uploader';
+import productController from './controllers/product.controller';
+const router = express.Router();
 
-router.post('/login', memberController.login);
-router.post('/signup', memberController.signup);
+router.get('/member/seller', memberController.getSeller);
 
 export default router;

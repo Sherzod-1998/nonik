@@ -12,6 +12,15 @@ class MemberService {
 	}
 
 	/** SPA */
+	public async getSeller(): Promise<Member> {
+		const result = await this.memberModel.findOne({ memberType: MemberType.SELLER }).lean().exec();
+
+		if (!result) {
+			throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+		}
+
+		return result;
+	}
 
 	public async signup(input: MemberInput): Promise<Member> {
 		const salt = await bcrypt.genSalt(); // `berypt` noto'g'ri edi, `bcrypt` deb tuzatilgan
