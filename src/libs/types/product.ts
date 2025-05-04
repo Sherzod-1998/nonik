@@ -10,7 +10,6 @@ export interface Product {
 	productName: string;
 	productPrice: number;
 	productLeftCount: number;
-	productVolume: number;
 	productDesc?: string;
 	productImages: string[];
 	productView: number;
@@ -25,7 +24,6 @@ export interface ProductInput {
 	productName: string;
 	productPrice: number;
 	productLeftCount: number;
-	productVolume?: number;
 	productDesc?: string;
 	productImages?: string[];
 	productViews?: number;
