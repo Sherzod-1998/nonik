@@ -28,7 +28,7 @@ router.get('/product/:id', memberController.retrieveAuth, productController.getP
 
 /** Order  */
 router.post('/order/create', memberController.verifyAuth, orderController.createOrder);
-
+router.get('/order/all', memberController.verifyAuth, orderController.getMyOrders);
 /** Order  */
 
 export default router;

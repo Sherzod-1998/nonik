@@ -25,4 +25,27 @@ orderController.createOrder = async (req: ExtendedRequest, res: Response) => {
 	}
 };
 
+orderController.getMyOrders = async (req: ExtendedRequest, res: Response) => {
+	try {
+		console.log('getMyOrderssssssssssss');
+		const { page, limit, orderStatus } = req.query;
+		const inquiry: OrderInquiry = {
+			page: Number(page),
+			limit: Number(limit),
+			orderStatus: orderStatus as OrderStatus,
+		};
+		console.log('inquiry:', inquiry);
+		const result = await orderService.getMyOrders(req.member, inquiry);
+		res.status(HttpCode.OK).json(result); // Changed to HttpCode.OK (200)
+	} catch (err) {
+		console.log('Error, getMyOrders:', err);
+
+		if (err instanceof Errors) {
+			res.status(err.code).json(err);
+		} else {
+			res.status(Errors.standard.code).json(Errors.standard);
+		}
+	}
+};
+
 export default orderController;
