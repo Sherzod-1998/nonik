@@ -1,8 +1,28 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import router from '../router';
+import { ExtendedRequest } from '../libs/types/member';
 import { T } from '../libs/types/common';
-import memberController from './member.controller';
+import { Response } from 'express';
+import Errors, { HttpCode } from '../libs/Errors';
+import OrderService from '../models/Order.service';
+import { OrderInquiry, OrderUpdateInput } from '../libs/types/order';
+import { OrderStatus } from '../libs/enums/order.enum';
 
-router.get('/member/restaurant', memberController.getRestaurant);
-
+const orderService = new OrderService();
 const orderController: T = {};
+
+orderController.createOrder = async (req: ExtendedRequest, res: Response) => {
+	try {
+		console.log('createOrder');
+		const result = await orderService.createOrder(req.member, req.body);
+		res.status(HttpCode.CREATED).json(result); // `-` o'rniga `.` qo'yildi
+	} catch (err) {
+		console.log('Error, createOrder:', err);
+		if (err instanceof Errors) {
+			res.status(err.code).json(err);
+		} else {
+			res.status(Errors.standard.code).json(Errors.standard);
+		}
+	}
+};
+
+export default orderController;
