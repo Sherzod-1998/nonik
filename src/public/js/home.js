@@ -23,7 +23,6 @@ function fitElementToParent(el, padding) {
 	window.addEventListener('resize', resize);
 }
 
-
 (function () {
 	const sphereEl = document.querySelector('.sphere-animation'),
 		spherePathEls = sphereEl.querySelectorAll('.sphere path'),

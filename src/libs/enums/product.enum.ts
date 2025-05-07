@@ -8,8 +8,7 @@ export enum ProductCollection {
 	SKINCARE = 'SKINCARE', // teri parvarishi
 	MAKEUP = 'MAKEUP', // makiyaj
 	HAIRCARE = 'HAIRCARE', // soch parvarishi
-	FRAGRANCE = 'FRAGRANCE', // atirlar
-	MEN = 'MEN', // erkaklar uchun kosmetika
+	PERFUME = 'PERFUME', // atirlar
 	SUNCARE = 'SUNCARE', // quyoshdan himoya vositalari
 	OTHER = 'OTHER',
 }
