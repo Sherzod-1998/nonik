@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ObjectId } from 'mongoose';
 import { Order, OrderInquiry, OrderItemInput, OrderUpdateInput } from '../libs/types/order';
 import Errors, { HttpCode, Message } from '../libs/Errors';

@@ -7,11 +7,15 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
+    "allowJs": true,                   // <--- BU MUHIM
     "baseUrl": "./",
     "paths": {
       "*": ["node_modules/*"]
     }
   },
-  "include": ["src/**/*.ts"],
+  "include": [
+    "src/**/*.ts",
+    "src/public/js/**/*.js"            // <--- BU YANGI QATOR
+  ],
   "exclude": ["node_modules"]
 }

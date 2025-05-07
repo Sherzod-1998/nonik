@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ExtendedRequest } from '../libs/types/member';
 import { T } from '../libs/types/common';
 import { Response } from 'express';

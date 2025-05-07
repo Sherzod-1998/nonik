@@ -70,7 +70,7 @@ sellerController.processLogin = async (req: AdminRequest, res: Response) => {
 		// TODO SESION
 		req.session.member = result;
 		req.session.save(function () {
-			res.send(result);
+			res.redirect('/admin');
 		});
 	} catch (err) {
 		console.log('Error on router/processLogin', err);

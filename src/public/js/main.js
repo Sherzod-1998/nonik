@@ -1,1 +1,1 @@
-console.log("FRONTEND JAVASCRIPT ISHGA TUSHDI");
+console.log("Basic frontend javascript file");
