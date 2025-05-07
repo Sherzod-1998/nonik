@@ -29,7 +29,7 @@
       <div class="board">
         <div class="dishes-table">
           <span class="new-dish-txt" style="margin-bottom: 30px">
-            RESTAURANT MENU
+            SHOPPING MENU
           </span>
           <table class="table table-bordered table-hover">
             <thead class="thead-light">
@@ -37,9 +37,9 @@
                 <th scope="col">T/r</th>
                 <th scope="col">Product Name</th>
                 <th scope="col">Product Type</th>
-                <th scope="col">Product Volume</th>
                 <th scope="col">Product Price</th>
                 <th scope="col">Product Left Count</th>
+                <th scope="col">Product Image</th>
                 <th scope="col">Status</th>
               </tr>
             </thead>
@@ -50,11 +50,26 @@
                   <td><%= key + 1 %></td>
                   <td><%= value.productName %></td>
                   <td><%= value.productCollection %></td>
-                  <td>
-                    <%= value.productCollection === 'DRINK' ? value.productVolume : value.productSize %>
-                  </td>
                   <td><%= value.productPrice %></td>
                   <td><%= value.productLeftCount %></td>
+                  <td>
+                    <% if (value.productImages && value.productImages.length > 0) { %>
+                      <% value.productImages.forEach(function(img) { %>
+                        <img 
+                          src="/<%= img %>" 
+                          alt="Product Image" 
+                          style="width: 80px; height: auto; margin-right: 5px;" 
+                          onerror="this.outerHTML = 'Not Available';"
+                        />
+                      <% }) %>
+                    <% } else { %>
+                      Not Available
+                    <% } %>
+                  </td>
+                  
+                  
+                  
+                  
                   <td>
                     <select class="spec-select new-product-status"
                     id="<%= value._id %>"
