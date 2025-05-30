@@ -13,18 +13,31 @@ const productController: T = {};
 productController.getProducts = async (req: Request, res: Response) => {
 	try {
 		console.log('getProducts');
+
 		const { page, limit, order, productCollection, search } = req.query;
+
 		const inquiry: ProductInquiry = {
 			order: String(order),
 			page: Number(page),
 			limit: Number(limit),
 		};
+
+		// ✅ productCollection ni array ko‘rinishida to‘g‘ri tiplab olish
 		if (productCollection) {
-			inquiry.productCollection = productCollection as ProductCollection;
+			if (Array.isArray(productCollection)) {
+				inquiry.productCollection = productCollection as ProductCollection[];
+			} else if (typeof productCollection === 'string') {
+				inquiry.productCollection = [productCollection as ProductCollection];
+			}
 		}
+
+		// Optional search
 		if (search) inquiry.search = String(search);
+
 		const result = await productService.getProducts(inquiry);
+
 		console.log('result', result);
+
 		res.status(HttpCode.OK).json(result);
 	} catch (err) {
 		console.log('Error, getProducts:', err);
