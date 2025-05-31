@@ -83,6 +83,19 @@ productController.getAllProducts = async (req: Request, res: Response) => {
 	}
 };
 
+productController.recommendProducts = async (req: Request, res: Response) => {
+	try {
+		const { productId } = req.params;
+
+		const result = await productService.getRecommendedProducts(productId);
+
+		res.status(200).json(result);
+	} catch (err) {
+		console.log('Error, recommendProducts:', err);
+		res.status(500).json({ message: 'Internal server error' });
+	}
+};
+
 productController.createNewProduct = async (req: AdminRequest, res: Response) => {
 	try {
 		console.log('createNewProducts');

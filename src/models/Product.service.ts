@@ -8,6 +8,7 @@ import { ObjectId } from 'mongoose';
 import { ViewGroup } from '../libs/enums/view.enum';
 import { ViewInput } from '../libs/types/view';
 import ViewService from './View.service';
+import { LeanDocument } from 'mongoose';
 
 class ProductService {
 	private readonly productModel;
@@ -74,6 +75,23 @@ class ProductService {
 		}
 
 		return result;
+	}
+
+	public async getRecommendedProducts(productId: string): Promise<LeanDocument<Product>[]> {
+		const mainProduct = await this.productModel.findById(productId).lean();
+
+		if (!mainProduct) throw new Error('Product not found');
+
+		const recommendations = await this.productModel
+			.find({
+				_id: { $ne: mainProduct._id },
+				productCollection: mainProduct.productCollection,
+				productStatus: ProductStatus.PROCESS,
+			})
+			.limit(6)
+			.lean();
+
+		return recommendations;
 	}
 
 	public async createNewProduct(input: ProductInput): Promise<Product> {
