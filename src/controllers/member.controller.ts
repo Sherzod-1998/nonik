@@ -12,11 +12,11 @@ const memberController: T = {};
 
 memberController.getSeller = async (req: Request, res: Response) => {
 	try {
-		console.log('getRestaurant');
+		console.log('getSeller');
 		const result = await memberService.getSeller();
 		res.status(HttpCode.OK).json(result);
 	} catch (err) {
-		console.log('Error, getRestaurant:', err);
+		console.log('Error, getSeller:', err);
 		if (err instanceof Errors) {
 			res.status(err.code).json(err);
 		} else {
