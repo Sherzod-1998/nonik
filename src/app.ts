@@ -6,7 +6,7 @@ import routerAdmin from './router-admin';
 import morgan from 'morgan';
 import { MORGAM_FORMAT } from './libs/config';
 import cookieParser from 'cookie-parser';
-
+import './cron/cleanupSchedule';
 import session from 'express-session';
 import ConnectMongoDB from 'connect-mongodb-session';
 import { T } from './libs/types/common';
