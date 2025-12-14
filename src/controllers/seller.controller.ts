@@ -12,7 +12,7 @@ const sellerController: T = {};
 sellerController.goHome = (req: Request, res: Response) => {
 	try {
 		console.log('goHome');
-		res.render('Home');
+		res.render('home');
 	} catch (err) {
 		console.log('Error, goHome:', err);
 	}
@@ -29,7 +29,7 @@ sellerController.getSignup = (req: Request, res: Response) => {
 
 sellerController.getLogin = (req: Request, res: Response) => {
 	try {
-		res.render('Login');
+		res.render('login');
 	} catch (err) {
 		console.log('Error, getLogin:', err);
 		res.redirect('/admin');
