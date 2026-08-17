@@ -4,5 +4,4 @@ dist
 
 .env
 .env.production
-uploadsnode_modules/
 uploads
