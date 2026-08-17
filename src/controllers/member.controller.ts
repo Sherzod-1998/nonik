@@ -18,7 +18,6 @@ const accessTokenCookieOptions = {
 
 memberController.getSeller = async (req: Request, res: Response) => {
 	try {
-		console.log('getSeller');
 		const result = await memberService.getSeller();
 		res.status(HttpCode.OK).json(result);
 	} catch (err) {
@@ -33,7 +32,6 @@ memberController.getSeller = async (req: Request, res: Response) => {
 
 memberController.signup = async (req: Request, res: Response) => {
 	try {
-		console.log('signup');
 		const input: MemberInput = req.body,
 			result: Member = await memberService.signup(input);
 		const token = await authService.createToken(result);
@@ -52,7 +50,6 @@ memberController.signup = async (req: Request, res: Response) => {
 
 memberController.login = async (req: Request, res: Response) => {
 	try {
-		console.log('login');
 		const input: LoginInput = req.body,
 			result = await memberService.login(input),
 			token = await authService.createToken(result);
@@ -72,7 +69,6 @@ memberController.login = async (req: Request, res: Response) => {
 
 memberController.logout = (req: ExtendedRequest, res: Response) => {
 	try {
-		console.log('logout');
 		res.cookie('accessToken', null, { ...accessTokenCookieOptions, maxAge: 0 });
 		res.status(HttpCode.OK).json({ logout: true });
 	} catch (err) {
@@ -85,7 +81,6 @@ memberController.logout = (req: ExtendedRequest, res: Response) => {
 memberController.verifyAuth = async (req: ExtendedRequest, res: Response, next: NextFunction) => {
 	try {
 		const token = req.cookies['accessToken'];
-		console.log('token', token);
 		if (token) req.member = await authService.checkAuth(token);
 
 		if (!req.member) throw new Errors(HttpCode.UNAUTHORIZED, Message.NOT_AUTHENTICATED);
@@ -103,7 +98,6 @@ memberController.verifyAuth = async (req: ExtendedRequest, res: Response, next: 
 
 memberController.getMemberDetail = async (req: ExtendedRequest, res: Response) => {
 	try {
-		console.log('getMemberDetail');
 		const result = await memberService.getMemberDetail(req.member);
 		res.status(HttpCode.OK).json(result);
 	} catch (err) {
@@ -115,7 +109,6 @@ memberController.getMemberDetail = async (req: ExtendedRequest, res: Response) =
 
 memberController.updateMember = async (req: ExtendedRequest, res: Response) => {
 	try {
-		console.log('updateMember');
 		const input: MemberUpdateInput = req.body;
 		if (req.file) input.memberImage = req.file.path;
 		const result = await memberService.updateMember(req.member, input);
@@ -129,7 +122,6 @@ memberController.updateMember = async (req: ExtendedRequest, res: Response) => {
 };
 memberController.getTopUsers = async (req: Request, res: Response) => {
 	try {
-		console.log('getTopUsers');
 		const result = await memberService.getTopUsers();
 		res.status(HttpCode.OK).json(result);
 	} catch (err) {

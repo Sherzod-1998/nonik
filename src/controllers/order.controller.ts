@@ -11,7 +11,6 @@ const orderController: T = {};
 
 orderController.createOrder = async (req: ExtendedRequest, res: Response) => {
 	try {
-		console.log('createOrder');
 		const result = await orderService.createOrder(req.member, req.body);
 		res.status(HttpCode.CREATED).json(result); // `-` o'rniga `.` qo'yildi
 	} catch (err) {
@@ -26,14 +25,12 @@ orderController.createOrder = async (req: ExtendedRequest, res: Response) => {
 
 orderController.getMyOrders = async (req: ExtendedRequest, res: Response) => {
 	try {
-		console.log('getMyOrderssssssssssss');
 		const { page, limit, orderStatus } = req.query;
 		const inquiry: OrderInquiry = {
 			page: Number(page),
 			limit: Number(limit),
 			orderStatus: orderStatus as OrderStatus,
 		};
-		console.log('inquiry:', inquiry);
 		const result = await orderService.getMyOrders(req.member, inquiry);
 		res.status(HttpCode.OK).json(result); // Changed to HttpCode.OK (200)
 	} catch (err) {
@@ -49,7 +46,6 @@ orderController.getMyOrders = async (req: ExtendedRequest, res: Response) => {
 
 orderController.updateOrder = async (req: ExtendedRequest, res: Response) => {
 	try {
-		console.log('updateOrder');
 		const input: OrderUpdateInput = req.body;
 		const result = await orderService.updateOrder(req.member, input);
 		res.status(HttpCode.CREATED).json(result);

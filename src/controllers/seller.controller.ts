@@ -11,7 +11,6 @@ const memberService = new MemberService();
 const sellerController: T = {};
 sellerController.goHome = (req: Request, res: Response) => {
 	try {
-		console.log('goHome');
 		res.render('home');
 	} catch (err) {
 		console.log('Error, goHome:', err);
@@ -38,9 +37,6 @@ sellerController.getLogin = (req: Request, res: Response) => {
 
 sellerController.processSignup = async (req: AdminRequest, res: Response) => {
 	try {
-		console.log('processSignup');
-		console.log('BODY', req.body);
-		console.log('FILE', req.file);
 		const file = req.file;
 		if (!file) throw new Errors(HttpCode.BAD_REQUEST, Message.SOMETHING_WENT_WRONG);
 
@@ -62,8 +58,6 @@ sellerController.processSignup = async (req: AdminRequest, res: Response) => {
 
 sellerController.processLogin = async (req: AdminRequest, res: Response) => {
 	try {
-		console.log('processLogin');
-
 		const input: LoginInput = req.body;
 		const result = await memberService.processLogin(input);
 
@@ -81,7 +75,6 @@ sellerController.processLogin = async (req: AdminRequest, res: Response) => {
 
 sellerController.logout = async (req: AdminRequest, res: Response) => {
 	try {
-		console.log('logout');
 		req.session.destroy(function () {
 			res.redirect('/admin');
 		});
@@ -94,9 +87,7 @@ sellerController.logout = async (req: AdminRequest, res: Response) => {
 
 sellerController.getUsers = async (req: Request, res: Response) => {
 	try {
-		console.log('getUsers');
 		const result = await memberService.getUsers();
-		console.log('result', result);
 		res.render('users', { users: result });
 	} catch (err) {
 		console.log('Error, getUsers:', err);
@@ -106,9 +97,7 @@ sellerController.getUsers = async (req: Request, res: Response) => {
 
 sellerController.updateChosenUser = async (req: Request, res: Response) => {
 	try {
-		console.log('updateChosenUser');
 		const result = await memberService.updateChosenUser(req.body);
-		console.log('result', result);
 
 		res.status(HttpCode.OK).json({ data: result });
 	} catch (err) {
@@ -122,7 +111,6 @@ sellerController.updateChosenUser = async (req: Request, res: Response) => {
 };
 sellerController.checkAuthSession = async (req: AdminRequest, res: Response) => {
 	try {
-		console.log('checkAuthSession');
 		if (req.session?.member) {
 			res.send(`<script> alert(${JSON.stringify(req.session.member.memberNick)})</script>`);
 		} else {
