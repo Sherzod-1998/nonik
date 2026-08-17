@@ -3,6 +3,7 @@ import memberController from './controllers/member.controller';
 import uploader from './libs/utils/uploader';
 import productController from './controllers/product.controller';
 import orderController from './controllers/order.controller';
+import favoriteController from './controllers/favorite.controller';
 const router = express.Router();
 
 /** Member */
@@ -32,5 +33,10 @@ router.post('/order/create', memberController.verifyAuth, orderController.create
 router.get('/order/all', memberController.verifyAuth, orderController.getMyOrders);
 router.post('/order/update', memberController.verifyAuth, orderController.updateOrder);
 /** Order  */
+
+/** Favorite */
+router.post('/favorite/toggle', memberController.verifyAuth, favoriteController.toggleFavorite);
+router.get('/favorite/my', memberController.verifyAuth, favoriteController.getMyFavorites);
+/** Favorite */
 
 export default router;
