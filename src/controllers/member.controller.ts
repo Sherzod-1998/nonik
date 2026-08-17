@@ -120,6 +120,19 @@ memberController.updateMember = async (req: ExtendedRequest, res: Response) => {
 		else res.status(Errors.standard.code).json(Errors.standard);
 	}
 };
+memberController.changePassword = async (req: ExtendedRequest, res: Response) => {
+	try {
+		const { currentPassword, newPassword } = req.body;
+		await memberService.changePassword(req.member._id, currentPassword, newPassword);
+
+		res.status(HttpCode.OK).json({ message: 'Password changed successfully!' });
+	} catch (err) {
+		console.log('Error, changePassword:', err);
+		if (err instanceof Errors) res.status(err.code).json(err);
+		else res.status(Errors.standard.code).json(Errors.standard);
+	}
+};
+
 memberController.getTopUsers = async (req: Request, res: Response) => {
 	try {
 		const result = await memberService.getTopUsers();

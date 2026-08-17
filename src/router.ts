@@ -19,6 +19,7 @@ router.post(
 	memberController.updateMember,
 );
 router.get('/member/top-users', memberController.getTopUsers);
+router.post('/member/change-password', memberController.verifyAuth, memberController.changePassword);
 /** Member */
 
 /** Product **/

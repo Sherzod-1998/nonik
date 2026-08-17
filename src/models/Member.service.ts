@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongoose';
 import MemberModel from '../schema/Member.model';
 import { LoginInput, Member, MemberInput, MemberUpdateInput } from '../libs/types/member';
 import Errors, { HttpCode, Message } from '../libs/Errors';
@@ -146,6 +147,21 @@ class MemberService {
 
 		//  console.log("result", result);
 		//  return result;
+	}
+
+	public async changePassword(memberId: ObjectId, currentPassword: string, newPassword: string): Promise<void> {
+		const id = shapeIntoMongooseObjectId(memberId);
+		const member = await this.memberModel.findById(id).select('+memberPassword').exec();
+		if (!member) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+
+		const isMatch = await bcrypt.compare(currentPassword, member.memberPassword);
+		if (!isMatch) {
+			throw new Errors(HttpCode.UNAUTHORIZED, Message.WRONG_PASSWORD);
+		}
+
+		const salt = await bcrypt.genSalt();
+		member.memberPassword = await bcrypt.hash(newPassword, salt);
+		await member.save();
 	}
 
 	public async addUserPoint(member: Member, point: number): Promise<Member> {
