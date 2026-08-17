@@ -27,10 +27,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static('./uploads'));
 app.use(express.urlencoded({ extended: true })); //traditional api
 app.use(express.json()); //REST API
+const allowedOrigins = (process.env.CLIENT_ORIGIN || 'http://localhost:3000').split(',').map((o) => o.trim());
 app.use(
 	cors({
 		credentials: true,
-		origin: true,
+		origin: allowedOrigins,
 	}),
 );
 app.use(cookieParser());
