@@ -4,6 +4,7 @@ import uploader from './libs/utils/uploader';
 import productController from './controllers/product.controller';
 import orderController from './controllers/order.controller';
 import favoriteController from './controllers/favorite.controller';
+import contactController from './controllers/contact.controller';
 const router = express.Router();
 
 /** Member */
@@ -39,5 +40,9 @@ router.post('/order/update', memberController.verifyAuth, orderController.update
 router.post('/favorite/toggle', memberController.verifyAuth, favoriteController.toggleFavorite);
 router.get('/favorite/my', memberController.verifyAuth, favoriteController.getMyFavorites);
 /** Favorite */
+
+/** Contact */
+router.post('/contact/submit', contactController.submitMessage);
+/** Contact */
 
 export default router;
