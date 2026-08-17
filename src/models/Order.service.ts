@@ -93,11 +93,7 @@ class OrderService {
 			])
 			.exec();
 
-		if (!result || result.length === 0) {
-			throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
-		}
-
-		return result;
+		return result ?? [];
 	}
 
 	public async updateOrder(member: Member, input: OrderUpdateInput): Promise<Order> {
