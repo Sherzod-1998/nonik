@@ -17,9 +17,23 @@ function getTargetImageStorage(addres: any) {
 	});
 }
 
+const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+
+function imageFileFilter(req: any, file: Express.Multer.File, cb: multer.FileFilterCallback) {
+	if (ALLOWED_MIME_TYPES.includes(file.mimetype)) {
+		cb(null, true);
+	} else {
+		cb(new Error('Only image files (jpeg, png, gif, webp) are allowed'));
+	}
+}
+
 const makeUploader = (address: string) => {
 	const storage = getTargetImageStorage(address);
-	return multer({ storage: storage });
+	return multer({
+		storage: storage,
+		fileFilter: imageFileFilter,
+		limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+	});
 };
 
 export default makeUploader;
