@@ -50,7 +50,9 @@ class MemberService {
 			throw new Errors(HttpCode.UNAUTHORIZED, Message.WRONG_PASSWORD);
 		}
 
-		return await this.memberModel.findById(member._id).lean().exec();
+		const result = await this.memberModel.findById(member._id).lean().exec();
+		if (result) result.memberPassword = '';
+		return result;
 	}
 
 	public async getMemberDetail(member: Member): Promise<Member> {
@@ -138,7 +140,9 @@ class MemberService {
 			throw new Errors(HttpCode.UNAUTHORIZED, Message.WRONG_PASSWORD);
 		}
 
-		return await this.memberModel.findById(member._id).exec();
+		const result = await this.memberModel.findById(member._id).exec();
+		if (result) result.memberPassword = '';
+		return result;
 
 		//  console.log("result", result);
 		//  return result;
