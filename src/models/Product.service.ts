@@ -19,11 +19,22 @@ class ProductService {
 		this.viewService = new ViewService();
 	}
 
-	public async getProducts(inquiry: ProductInquiry): Promise<Product[]> {
+	public async getProducts(inquiry: ProductInquiry): Promise<{ products: Product[]; total: number }> {
 		const match: T = { productStatus: ProductStatus.PROCESS };
 
 		if (inquiry.productCollection && inquiry.productCollection.length > 0) {
 			match.productCollection = { $in: inquiry.productCollection };
+		}
+
+		if (inquiry.brandCollection && inquiry.brandCollection.length > 0) {
+			match.brandCollection = { $in: inquiry.brandCollection };
+		}
+
+		if (inquiry.minPrice !== undefined || inquiry.maxPrice !== undefined) {
+			match.productPrice = {
+				...(inquiry.minPrice !== undefined && { $gte: inquiry.minPrice }),
+				...(inquiry.maxPrice !== undefined && { $lte: inquiry.maxPrice }),
+			};
 		}
 
 		if (inquiry.search) {
@@ -32,18 +43,21 @@ class ProductService {
 
 		const sort: T = inquiry.order === 'productPrice' ? { [inquiry.order]: 1 } : { [inquiry.order]: -1 };
 
-		const result = await this.productModel
-			.aggregate([
-				{ $match: match },
-				{ $sort: sort },
-				{ $skip: (inquiry.page * 1 - 1) * inquiry.limit },
-				{ $limit: inquiry.limit * 1 },
-			])
-			.exec();
+		const [result, total] = await Promise.all([
+			this.productModel
+				.aggregate([
+					{ $match: match },
+					{ $sort: sort },
+					{ $skip: (inquiry.page * 1 - 1) * inquiry.limit },
+					{ $limit: inquiry.limit * 1 },
+				])
+				.exec(),
+			this.productModel.countDocuments(match).exec(),
+		]);
 
 		if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
 
-		return result;
+		return { products: result, total };
 	}
 
 	public async getProduct(memberId: ObjectId | null, id: string): Promise<Product> {

@@ -4,7 +4,7 @@ import { T } from '../libs/types/common';
 import ProductService from '../models/Product.service';
 import { AdminRequest, ExtendedRequest } from '../libs/types/member';
 import { ProductInput, ProductInquiry } from '../libs/types/product';
-import { ProductCollection } from '../libs/enums/product.enum';
+import { BrandCollection, ProductCollection } from '../libs/enums/product.enum';
 
 const productService = new ProductService();
 
@@ -12,7 +12,7 @@ const productController: T = {};
 
 productController.getProducts = async (req: Request, res: Response) => {
 	try {
-		const { page, limit, order, productCollection, search } = req.query;
+		const { page, limit, order, productCollection, brandCollection, minPrice, maxPrice, search } = req.query;
 
 		const inquiry: ProductInquiry = {
 			order: String(order),
@@ -29,12 +29,26 @@ productController.getProducts = async (req: Request, res: Response) => {
 			}
 		}
 
+		// ✅ brandCollection ni array ko‘rinishida to‘g‘ri tiplab olish
+		if (brandCollection) {
+			if (Array.isArray(brandCollection)) {
+				inquiry.brandCollection = brandCollection as BrandCollection[];
+			} else if (typeof brandCollection === 'string') {
+				inquiry.brandCollection = [brandCollection as BrandCollection];
+			}
+		}
+
+		// Optional price range
+		if (minPrice !== undefined) inquiry.minPrice = Number(minPrice);
+		if (maxPrice !== undefined) inquiry.maxPrice = Number(maxPrice);
+
 		// Optional search
 		if (search) inquiry.search = String(search);
 
 		const result = await productService.getProducts(inquiry);
 
-		res.status(HttpCode.OK).json(result);
+		res.set('X-Total-Count', String(result.total));
+		res.status(HttpCode.OK).json(result.products);
 	} catch (err) {
 		console.log('Error, getProducts:', err);
 

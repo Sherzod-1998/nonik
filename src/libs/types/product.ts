@@ -22,6 +22,9 @@ export interface ProductInquiry {
 	page: number;
 	limit: number;
 	productCollection?: ProductCollection[];
+	brandCollection?: BrandCollection[];
+	minPrice?: number;
+	maxPrice?: number;
 	search?: string;
 }
 

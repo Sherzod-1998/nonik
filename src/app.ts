@@ -32,6 +32,7 @@ app.use(
 	cors({
 		credentials: true,
 		origin: allowedOrigins,
+		exposedHeaders: ['X-Total-Count'],
 	}),
 );
 app.use(cookieParser());
