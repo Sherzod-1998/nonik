@@ -21,6 +21,9 @@ export enum Message {
 	NOT_AUTHENTICATED = 'You are not authenticated, Please login first!',
 	TOKEN_CREATION_FAILED = "TOKEN_CREATION_FAILED",
 	INSUFFICIENT_DATA = 'Please provide all required fields!',
+
+	PRODUCT_NOT_FOUND = 'One or more products in your order were not found!',
+	OUT_OF_STOCK = 'Not enough stock available for one or more items!',
 }
 
 class Errors extends Error {

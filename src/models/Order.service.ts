@@ -5,6 +5,7 @@ import { Member } from '../libs/types/member';
 import MemberService from './Member.service';
 import OrderModel from '../schema/Order.model';
 import OrderItemModel from '../schema/OrderItem.model';
+import ProductModel from '../schema/Product.model';
 import { shapeIntoMongooseObjectId } from '../libs/config';
 import { OrderStatus } from '../libs/enums/order.enum';
 import { T } from '../libs/types/common';
@@ -12,17 +13,40 @@ import { T } from '../libs/types/common';
 class OrderService {
 	private readonly orderModel;
 	private readonly orderItemModel;
+	private readonly productModel;
 	private readonly memberService;
 
 	constructor() {
 		this.orderModel = OrderModel;
 		this.orderItemModel = OrderItemModel;
+		this.productModel = ProductModel;
 		this.memberService = new MemberService();
 	}
 
 	public async createOrder(member: Member, input: OrderItemInput[]): Promise<Order> {
 		const memberId = shapeIntoMongooseObjectId(member._id);
-		const amount = input.reduce((accumulator, item) => {
+
+		// Har bir item uchun haqiqiy mahsulotni bazadan olib, narxini serverda hisoblaymiz
+		// (client yuborgan itemPrice'ga ishonmaymiz)
+		const verifiedItems = await Promise.all(
+			input.map(async (item: OrderItemInput) => {
+				const productId = shapeIntoMongooseObjectId(item.productId);
+				const product = await this.productModel.findById(productId).exec();
+
+				if (!product) throw new Errors(HttpCode.BAD_REQUEST, Message.PRODUCT_NOT_FOUND);
+				if (product.productLeftCount < item.itemQuantity) {
+					throw new Errors(HttpCode.BAD_REQUEST, Message.OUT_OF_STOCK);
+				}
+
+				return {
+					...item,
+					productId,
+					itemPrice: product.productPrice,
+				};
+			}),
+		);
+
+		const amount = verifiedItems.reduce((accumulator, item) => {
 			console.log('Processing Item:', item);
 			console.log(`Price: ${item.itemPrice}, Quantity: ${item.itemQuantity}`);
 
@@ -41,11 +65,12 @@ class OrderService {
 
 			const orderId = newOrder._id;
 			console.log('orderId', orderId);
-			await this.recordOrderItem(orderId, input);
+			await this.recordOrderItem(orderId, verifiedItems);
 
 			return newOrder;
 		} catch (err) {
 			console.log('Error, model: createOrder:', err);
+			if (err instanceof Errors) throw err;
 			throw new Errors(HttpCode.BAD_REQUEST, Message.CREATE_FAILED); // Xato yuzaga keldi
 		}
 	}
