@@ -1,4 +1,4 @@
-import Errors, { HttpCode } from '../libs/Errors';
+import Errors, { HttpCode, logError } from '../libs/Errors';
 import { Response } from 'express';
 import { T } from '../libs/types/common';
 import FavoriteService from '../models/Favorite.service';
@@ -14,7 +14,7 @@ favoriteController.toggleFavorite = async (req: ExtendedRequest, res: Response) 
 		const result = await favoriteService.toggleFavorite(req.member._id, productId);
 		res.status(HttpCode.OK).json(result);
 	} catch (err) {
-		console.log('Error, toggleFavorite:', err);
+		logError('Favorite.controller toggleFavorite:', err);
 		if (err instanceof Errors) {
 			res.status(err.code).json(err);
 		} else {
@@ -28,7 +28,7 @@ favoriteController.getMyFavorites = async (req: ExtendedRequest, res: Response) 
 		const result = await favoriteService.getFavorites(req.member._id);
 		res.status(HttpCode.OK).json(result);
 	} catch (err) {
-		console.log('Error, getMyFavorites:', err);
+		logError('Favorite.controller getMyFavorites:', err);
 		if (err instanceof Errors) {
 			res.status(err.code).json(err);
 		} else {

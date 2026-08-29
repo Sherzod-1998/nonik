@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { T } from '../libs/types/common';
 import MemberService from '../models/Member.service';
 import { ExtendedRequest, LoginInput, Member, MemberInput, MemberUpdateInput } from '../libs/types/member';
-import Errors, { HttpCode, Message } from '../libs/Errors';
+import Errors, { HttpCode, Message, logError } from '../libs/Errors';
 import AuthService from '../models/Auth.service';
 import { AUTH_TIMER } from '../libs/config';
 import { MemberType } from '../libs/enums/member.enum';
@@ -22,7 +22,7 @@ memberController.getSeller = async (req: Request, res: Response) => {
 		const result = await memberService.getSeller();
 		res.status(HttpCode.OK).json(result);
 	} catch (err) {
-		console.log('Error, getSeller:', err);
+		logError('Member.controller getSeller:', err);
 		if (err instanceof Errors) {
 			res.status(err.code).json(err);
 		} else {
@@ -49,7 +49,7 @@ memberController.signup = async (req: Request, res: Response) => {
 
 		res.status(HttpCode.CREATED).json({ member: result, accessToken: token });
 	} catch (err) {
-		console.log('Error, signup:', err);
+		logError('Member.controller signup:', err);
 		if (err instanceof Errors) res.status(err.code).json(err);
 		else res.status(Errors.standard.code).json(Errors.standard);
 	}
@@ -68,7 +68,7 @@ memberController.login = async (req: Request, res: Response) => {
 
 		res.status(HttpCode.OK).json({ member: result, accessToken: token });
 	} catch (err) {
-		console.log('Error, login:', err);
+		logError('Member.controller login:', err);
 		if (err instanceof Errors) res.status(err.code).json(err);
 		else res.status(Errors.standard.code).json(Errors.standard);
 	}
@@ -79,7 +79,7 @@ memberController.logout = (req: ExtendedRequest, res: Response) => {
 		res.cookie('accessToken', null, { ...accessTokenCookieOptions, maxAge: 0 });
 		res.status(HttpCode.OK).json({ logout: true });
 	} catch (err) {
-		console.log('Error, logout:', err);
+		logError('Member.controller logout:', err);
 		if (err instanceof Errors) res.status(err.code).json(err);
 		else res.status(Errors.standard.code).json(Errors.standard);
 	}
@@ -94,7 +94,7 @@ memberController.verifyAuth = async (req: ExtendedRequest, res: Response, next: 
 
 		next();
 	} catch (err) {
-		console.log('Error, verifyAuth:', err);
+		logError('Member.controller verifyAuth:', err);
 		if (err instanceof Errors) {
 			res.status(err.code).json(err);
 		} else {
@@ -108,7 +108,7 @@ memberController.getMemberDetail = async (req: ExtendedRequest, res: Response) =
 		const result = await memberService.getMemberDetail(req.member);
 		res.status(HttpCode.OK).json(result);
 	} catch (err) {
-		console.log('Error, getMemberDetail:', err);
+		logError('Member.controller getMemberDetail:', err);
 		if (err instanceof Errors) res.status(err.code).json(err);
 		else res.status(Errors.standard.code).json(Errors.standard);
 	}
@@ -129,7 +129,7 @@ memberController.updateMember = async (req: ExtendedRequest, res: Response) => {
 
 		res.status(HttpCode.OK).json(result);
 	} catch (err) {
-		console.log('Error, updateMember:', err);
+		logError('Member.controller updateMember:', err);
 		if (err instanceof Errors) res.status(err.code).json(err);
 		else res.status(Errors.standard.code).json(Errors.standard);
 	}
@@ -141,7 +141,7 @@ memberController.changePassword = async (req: ExtendedRequest, res: Response) =>
 
 		res.status(HttpCode.OK).json({ message: 'Password changed successfully!' });
 	} catch (err) {
-		console.log('Error, changePassword:', err);
+		logError('Member.controller changePassword:', err);
 		if (err instanceof Errors) res.status(err.code).json(err);
 		else res.status(Errors.standard.code).json(Errors.standard);
 	}
@@ -152,7 +152,7 @@ memberController.getTopUsers = async (req: Request, res: Response) => {
 		const result = await memberService.getTopUsers();
 		res.status(HttpCode.OK).json(result);
 	} catch (err) {
-		console.log('Error, getTopUsers:', err);
+		logError('Member.controller getTopUsers:', err);
 		if (err instanceof Errors) {
 			res.status(err.code).json(err);
 		} else {
@@ -166,7 +166,7 @@ memberController.retrieveAuth = async (req: ExtendedRequest, res: Response, next
 		if (token) req.member = await authService.checkAuth(token);
 		next();
 	} catch (err) {
-		console.log('Error, retrieveAuth:', err);
+		logError('Member.controller retrieveAuth:', err);
 		next();
 	}
 };

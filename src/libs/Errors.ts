@@ -26,6 +26,11 @@ export enum Message {
 	OUT_OF_STOCK = 'Not enough stock available for one or more items!',
 }
 
+/** Environment-aware error logging: keeps console output in dev, suppresses it in production. */
+export function logError(context: string, err: unknown): void {
+	if (process.env.NODE_ENV !== 'production') console.error(context, err);
+}
+
 class Errors extends Error {
 	public code: HttpCode;
 	public override message: Message;

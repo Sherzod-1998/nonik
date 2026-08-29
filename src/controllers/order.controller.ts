@@ -1,7 +1,7 @@
 import { AdminRequest, ExtendedRequest } from '../libs/types/member';
 import { T } from '../libs/types/common';
 import { Request, Response } from 'express';
-import Errors, { HttpCode } from '../libs/Errors';
+import Errors, { HttpCode, logError } from '../libs/Errors';
 import OrderService from '../models/Order.service';
 import { OrderInquiry, OrderUpdateInput } from '../libs/types/order';
 import { OrderStatus } from '../libs/enums/order.enum';
@@ -18,7 +18,7 @@ orderController.createOrder = async (req: ExtendedRequest, res: Response) => {
 		const result = await orderService.createOrder(req.member, req.body);
 		res.status(HttpCode.CREATED).json(result); // `-` o'rniga `.` qo'yildi
 	} catch (err) {
-		console.log('Error, createOrder:', err);
+		logError('Order.controller createOrder:', err);
 		if (err instanceof Errors) {
 			res.status(err.code).json(err);
 		} else {
@@ -38,7 +38,7 @@ orderController.getMyOrders = async (req: ExtendedRequest, res: Response) => {
 		const result = await orderService.getMyOrders(req.member, inquiry);
 		res.status(HttpCode.OK).json(result); // Changed to HttpCode.OK (200)
 	} catch (err) {
-		console.log('Error, getMyOrders:', err);
+		logError('Order.controller getMyOrders:', err);
 
 		if (err instanceof Errors) {
 			res.status(err.code).json(err);
@@ -54,7 +54,7 @@ orderController.updateOrder = async (req: ExtendedRequest, res: Response) => {
 		const result = await orderService.updateOrder(req.member, input);
 		res.status(HttpCode.CREATED).json(result);
 	} catch (err) {
-		console.log('Error, updateOrder:', err);
+		logError('Order.controller updateOrder:', err);
 		if (err instanceof Errors) {
 			res.status(err.code).json(err);
 		} else {
@@ -73,7 +73,7 @@ orderController.adminGetAllOrders = async (req: Request, res: Response) => {
 
 		res.render('orders', { orders, total, page, totalPages, statusFilter, OrderStatus });
 	} catch (err) {
-		console.log('Error, adminGetAllOrders:', err);
+		logError('Order.controller adminGetAllOrders:', err);
 		if (err instanceof Errors) {
 			res.status(err.code).json(err);
 		} else {
@@ -88,7 +88,7 @@ orderController.adminUpdateOrderStatus = async (req: Request, res: Response) => 
 		const result = await orderService.adminUpdateOrderStatus(orderId, newStatus);
 		res.status(HttpCode.OK).json({ data: result });
 	} catch (err) {
-		console.log('Error, adminUpdateOrderStatus:', err);
+		logError('Order.controller adminUpdateOrderStatus:', err);
 		if (err instanceof Errors) {
 			res.status(err.code).json(err);
 		} else {
@@ -117,7 +117,7 @@ orderController.getDashboard = async (req: AdminRequest, res: Response) => {
 			stats: { totalOrders, totalRevenue, totalProducts, totalUsers, recentOrders },
 		});
 	} catch (err) {
-		console.log('Error, getDashboard:', err);
+		logError('Order.controller getDashboard:', err);
 		res.render('home', { member: req.session.member, stats: null });
 	}
 };

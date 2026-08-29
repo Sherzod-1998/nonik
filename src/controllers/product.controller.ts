@@ -1,4 +1,4 @@
-import Errors, { HttpCode, Message } from '../libs/Errors';
+import Errors, { HttpCode, Message, logError } from '../libs/Errors';
 import { Request, Response } from 'express';
 import { T } from '../libs/types/common';
 import ProductService from '../models/Product.service';
@@ -50,7 +50,7 @@ productController.getProducts = async (req: Request, res: Response) => {
 		res.set('X-Total-Count', String(result.total));
 		res.status(HttpCode.OK).json(result.products);
 	} catch (err) {
-		console.log('Error, getProducts:', err);
+		logError('Product.controller getProducts:', err);
 
 		if (err instanceof Errors) {
 			res.status(err.code).json(err);
@@ -68,7 +68,7 @@ productController.getProduct = async (req: ExtendedRequest, res: Response) => {
 		const result = await productService.getProduct(memberId, id);
 		res.status(HttpCode.OK).json(result);
 	} catch (err) {
-		console.log('Error, getProduct:', err);
+		logError('Product.controller getProduct:', err);
 		if (err instanceof Errors) {
 			res.status(err.code).json(err);
 		} else {
@@ -87,7 +87,7 @@ productController.getAllProducts = async (req: Request, res: Response) => {
 
 		res.render('products', { products, total, page, totalPages, search });
 	} catch (err) {
-		console.log('Error getAllProducts', err);
+		logError('Product.controller getAllProducts:', err);
 		if (err instanceof Errors) {
 			res.status(err.code).json(err);
 		} else {
@@ -104,7 +104,7 @@ productController.recommendProducts = async (req: Request, res: Response) => {
 
 		res.status(200).json(result);
 	} catch (err) {
-		console.log('Error, recommendProducts:', err);
+		logError('Product.controller recommendProducts:', err);
 		res.status(500).json({ message: 'Internal server error' });
 	}
 };
@@ -121,7 +121,7 @@ productController.createNewProduct = async (req: AdminRequest, res: Response) =>
 		await productService.createNewProduct(data);
 		res.send(`<script> alert(${JSON.stringify('Successful creation!')}); window.location.replace('/admin/product/all') </script>`);
 	} catch (err) {
-		console.log('Error createNewProducts', err);
+		logError('Product.controller createNewProduct:', err);
 		const message = err instanceof Errors ? err.message : Message.SOMETHING_WENT_WRONG;
 		res.send(`<script> alert(${JSON.stringify(message)}); window.location.replace('/admin/product/all') </script>`);
 	}
@@ -159,7 +159,7 @@ productController.updateChosenProduct = async (req: AdminRequest, res: Response)
 		const result = await productService.updateChosenProduct(id, input as ProductUpdateInput);
 		res.status(HttpCode.OK).json({ data: result });
 	} catch (err) {
-		console.log('Error updateChosenProduct', err);
+		logError('Product.controller updateChosenProduct:', err);
 		if (err instanceof Errors) {
 			res.status(err.code).json(err);
 		} else {

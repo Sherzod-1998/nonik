@@ -4,7 +4,7 @@ import { T } from '../libs/types/common';
 import MemberService from '../models/Member.service';
 import { AdminRequest, LoginInput, MemberInput, MemberUpdateInput } from '../libs/types/member';
 import { MemberType } from '../libs/enums/member.enum';
-import Errors, { HttpCode, Message } from '../libs/Errors';
+import Errors, { HttpCode, Message, logError } from '../libs/Errors';
 
 const memberService = new MemberService();
 
@@ -13,7 +13,7 @@ sellerController.goHome = (req: Request, res: Response) => {
 	try {
 		res.render('home');
 	} catch (err) {
-		console.log('Error, goHome:', err);
+		logError('Seller.controller goHome:', err);
 	}
 };
 
@@ -21,7 +21,7 @@ sellerController.getSignup = (req: Request, res: Response) => {
 	try {
 		res.render('signup');
 	} catch (err) {
-		console.log('Error, getSignup:', err);
+		logError('Seller.controller getSignup:', err);
 		res.redirect('/admin');
 	}
 };
@@ -30,7 +30,7 @@ sellerController.getLogin = (req: Request, res: Response) => {
 	try {
 		res.render('login');
 	} catch (err) {
-		console.log('Error, getLogin:', err);
+		logError('Seller.controller getLogin:', err);
 		res.redirect('/admin');
 	}
 };
@@ -55,7 +55,7 @@ sellerController.processSignup = async (req: AdminRequest, res: Response) => {
 			res.redirect('/admin/product/all');
 		});
 	} catch (err) {
-		console.log('Error on router/processSignup', err);
+		logError('Seller.controller processSignup:', err);
 		const message = err instanceof Errors ? err.message : Message.SOMETHING_WENT_WRONG;
 		res.send(`<script> alert(${JSON.stringify(message)}); window.location.replace('/admin/signup') </script>`);
 	}
@@ -72,7 +72,7 @@ sellerController.processLogin = async (req: AdminRequest, res: Response) => {
 			res.redirect('/admin/product/all');
 		});
 	} catch (err) {
-		console.log('Error on router/processLogin', err);
+		logError('Seller.controller processLogin:', err);
 		const message = err instanceof Errors ? err.message : Message.SOMETHING_WENT_WRONG;
 		res.send(`<script> alert(${JSON.stringify(message)}); window.location.replace('admin/login') </script>`);
 	}
@@ -84,7 +84,7 @@ sellerController.logout = async (req: AdminRequest, res: Response) => {
 			res.redirect('/admin');
 		});
 	} catch (err) {
-		console.log('Error on router/processLogin', err);
+		logError('Seller.controller logout:', err);
 		const message = err instanceof Errors ? err.message : Message.SOMETHING_WENT_WRONG;
 		res.redirect('/admin');
 	}
@@ -100,7 +100,7 @@ sellerController.getUsers = async (req: Request, res: Response) => {
 
 		res.render('users', { users, total, page, totalPages, search });
 	} catch (err) {
-		console.log('Error, getUsers:', err);
+		logError('Seller.controller getUsers:', err);
 		res.redirect('/admin/login');
 	}
 };
@@ -120,7 +120,7 @@ sellerController.updateChosenUser = async (req: Request, res: Response) => {
 
 		res.status(HttpCode.OK).json({ data: result });
 	} catch (err) {
-		console.log('Error, updateChosenUser:', err);
+		logError('Seller.controller updateChosenUser:', err);
 		if (err instanceof Errors) {
 			res.status(err.code).json(err);
 		} else {

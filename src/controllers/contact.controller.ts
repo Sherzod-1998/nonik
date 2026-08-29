@@ -1,4 +1,4 @@
-import Errors, { HttpCode, Message } from '../libs/Errors';
+import Errors, { HttpCode, Message, logError } from '../libs/Errors';
 import { Request, Response } from 'express';
 import { T } from '../libs/types/common';
 import ContactMessageService from '../models/ContactMessage.service';
@@ -21,7 +21,7 @@ contactController.submitMessage = async (req: Request, res: Response) => {
 
 		res.status(HttpCode.CREATED).json({ message: 'Message sent successfully!' });
 	} catch (err) {
-		console.log('Error, submitMessage:', err);
+		logError('Contact.controller submitMessage:', err);
 		if (err instanceof Errors) {
 			res.status(err.code).json(err);
 		} else {
