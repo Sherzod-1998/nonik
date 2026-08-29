@@ -1,7 +1,7 @@
 {
   "name": "nonik",
   "version": "1.0.0",
-  "description": "This is nonik project backend",
+  "description": "REST API and admin panel backend for Nonik, a Korean cosmetics e-commerce platform, built with Express, TypeScript, and MongoDB.",
   "main": "src/server.ts",
   "scripts": {
     "start": "ts-node src/server.ts",
@@ -12,8 +12,12 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\""
   },
-  "author": "MIT",
+  "author": "Sherzod-1998",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Sherzod-1998/nonik.git"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "connect-mongodb-session": "^3.1.1",
