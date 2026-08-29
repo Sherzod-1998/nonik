@@ -3,6 +3,7 @@ import express from 'express';
 const routerAdmin = express.Router();
 import productController from './controllers/product.controller';
 import sellerController from './controllers/seller.controller';
+import orderController from './controllers/order.controller';
 import makeUploader from './libs/utils/uploader';
 import { T } from './libs/types/common';
 
@@ -82,4 +83,10 @@ routerAdmin.get(
         verifyCsrf,
         sellerController.updateChosenUser);
 /** User */
+
+/** Order */
+routerAdmin.get('/orders', sellerController.verifySeller, orderController.adminGetAllOrders);
+routerAdmin.post('/order/status', sellerController.verifySeller, verifyCsrf, orderController.adminUpdateOrderStatus);
+/** Order */
+
 export default routerAdmin;

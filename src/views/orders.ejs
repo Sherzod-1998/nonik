@@ -1,0 +1,133 @@
+<%- include('includes/header') %>
+
+<link rel="stylesheet" type="text/css" href="/css/products.css" />
+
+<body data-csrf="<%= csrfToken %>">
+  <div class="products-container">
+    <div class="navigation-menu">
+      <ul class="nav justify-content-center">
+        <li class="nav-item" style="cursor: pointer">
+          <a class="nav-link active" href="/admin/">Home</a>
+        </li>
+        <li class="nav-item" style="cursor: pointer">
+          <a class="nav-link" href="/admin/product/all">Menu</a>
+        </li>
+        <li class="nav-item" style="cursor: pointer">
+          <a class="nav-link" href="/admin/user/all">Users</a>
+        </li>
+        <li class="nav-item" style="cursor: pointer">
+          <a class="nav-link" href="/admin/orders">Orders</a>
+        </li>
+        <li
+          class="nav-item"
+          style="cursor: pointer"
+          onclick="return confirm('Do you want to logout?')"
+        >
+          <a class="nav-link" href="/admin/logout">Logout</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="restaurant-menu-frame">
+      <div class="board">
+        <div class="dishes-table">
+          <span class="new-dish-txt" style="margin-bottom: 30px">
+            ORDER MANAGEMENT
+          </span>
+
+          <div
+            class="long-input"
+            style="flex-direction: row; align-items: center; gap: 10px; margin-bottom: 20px"
+          >
+            <a
+              class="btn <%= !statusFilter ? 'btn-primary' : 'btn-outline-primary' %>"
+              href="/admin/orders?page=1"
+            >All</a>
+            <% Object.values(OrderStatus).forEach(function(status) { %>
+              <a
+                class="btn <%= statusFilter === status ? 'btn-primary' : 'btn-outline-primary' %>"
+                href="/admin/orders?status=<%= status %>&page=1"
+              ><%= status %></a>
+            <% }) %>
+          </div>
+
+          <table class="table table-bordered table-hover">
+            <thead class="thead-light">
+              <tr class="thead-light">
+                <th scope="col">T/r</th>
+                <th scope="col">Order ID</th>
+                <th scope="col">Customer</th>
+                <th scope="col">Items</th>
+                <th scope="col">Total</th>
+                <th scope="col">Created</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <!--  LOOP ORDERS: START  -->
+            <% orders.map(function (value, key) { %>
+              <tbody style="background: white">
+                <tr>
+                  <td><%= (page - 1) * 10 + key + 1 %></td>
+                  <td><%= String(value._id).slice(-8) %></td>
+                  <td>
+                    <% if (value.memberData && value.memberData.length > 0) { %>
+                      <%= value.memberData[0].memberNick %>
+                    <% } else { %>
+                      Unknown
+                    <% } %>
+                  </td>
+                  <td>
+                    <% if (value.orderItems && value.orderItems.length > 0) { %>
+                      <%= value.orderItems.length %> item(s)
+                    <% } else { %>
+                      0 item(s)
+                    <% } %>
+                  </td>
+                  <td>$<%= value.orderTotal %></td>
+                  <td><%= new Date(value.createdAt).toLocaleString() %></td>
+                  <td>
+                    <select class="spec-select new-order-status"
+                      id="<%= value._id %>"
+                    >
+                      <% Object.values(OrderStatus).forEach(function(status) { %>
+                        <option value="<%= status %>" <%= value.orderStatus === status ? 'selected' : '' %> ><%= status %></option>
+                      <% }) %>
+                    </select>
+                  </td>
+                </tr>
+              </tbody>
+            <% }); %>
+            <!--  LOOP ORDERS: END  -->
+          </table>
+          <nav
+            class="long-input"
+            style="flex-direction: row; justify-content: center; gap: 8px; margin-bottom: 25px"
+          >
+            <% if (page > 1) { %>
+              <a
+                class="btn btn-secondary"
+                href="/admin/orders?page=<%= page - 1 %><%= statusFilter ? '&status=' + statusFilter : '' %>"
+              >Prev</a>
+            <% } %>
+            <% for (let i = 1; i <= totalPages; i++) { %>
+              <a
+                class="btn <%= i === page ? 'btn-primary' : 'btn-outline-primary' %>"
+                href="/admin/orders?page=<%= i %><%= statusFilter ? '&status=' + statusFilter : '' %>"
+              ><%= i %></a>
+            <% } %>
+            <% if (page < totalPages) { %>
+              <a
+                class="btn btn-secondary"
+                href="/admin/orders?page=<%= page + 1 %><%= statusFilter ? '&status=' + statusFilter : '' %>"
+              >Next</a>
+            <% } %>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="/js/orders.js"></script>
+</body>
+
+<%- include('includes/footer') %>

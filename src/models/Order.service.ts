@@ -7,6 +7,7 @@ import OrderModel from '../schema/Order.model';
 import OrderItemModel from '../schema/OrderItem.model';
 import { shapeIntoMongooseObjectId } from '../libs/config';
 import { OrderStatus } from '../libs/enums/order.enum';
+import { T } from '../libs/types/common';
 
 class OrderService {
 	private readonly orderModel;
@@ -94,6 +95,58 @@ class OrderService {
 			.exec();
 
 		return result ?? [];
+	}
+
+	public async adminGetAllOrders(page = 1, statusFilter?: OrderStatus): Promise<{ orders: Order[]; total: number }> {
+		const limit = 10;
+		const matches: T = {};
+		if (statusFilter) matches.orderStatus = statusFilter;
+
+		const [orders, total] = await Promise.all([
+			this.orderModel
+				.aggregate([
+					{ $match: matches },
+					{ $sort: { updatedAt: -1 } },
+					{ $skip: (page - 1) * limit },
+					{ $limit: limit },
+					{
+						$lookup: {
+							from: 'orderItems',
+							localField: '_id',
+							foreignField: 'orderId',
+							as: 'orderItems',
+						},
+					},
+					{
+						$lookup: {
+							from: 'products',
+							localField: 'orderItems.productId',
+							foreignField: '_id',
+							as: 'productData',
+						},
+					},
+					{
+						$lookup: {
+							from: 'members',
+							localField: 'memberId',
+							foreignField: '_id',
+							as: 'memberData',
+						},
+					},
+				])
+				.exec(),
+			this.orderModel.countDocuments(matches).exec(),
+		]);
+
+		return { orders: orders ?? [], total };
+	}
+
+	public async adminUpdateOrderStatus(orderId: string, newStatus: OrderStatus): Promise<Order> {
+		const id = shapeIntoMongooseObjectId(orderId);
+		const result = await this.orderModel.findByIdAndUpdate(id, { orderStatus: newStatus }, { new: true }).exec();
+
+		if (!result) throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
+		return result;
 	}
 
 	public async updateOrder(member: Member, input: OrderUpdateInput): Promise<Order> {
