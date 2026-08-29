@@ -7,6 +7,8 @@ import { MemberStatus, MemberType } from '../libs/enums/member.enum';
 import * as bcrypt from 'bcryptjs';
 import { shapeIntoMongooseObjectId } from '../libs/config';
 
+const escapeRegExp = (text: string): string => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 class MemberService {
 	private readonly memberModel;
 
@@ -93,7 +95,7 @@ class MemberService {
 		const match: T = { memberType: MemberType.USER };
 
 		if (search) {
-			match.memberNick = { $regex: new RegExp(search, 'i') };
+			match.memberNick = { $regex: new RegExp(escapeRegExp(search), 'i') };
 		}
 
 		const [users, total] = await Promise.all([
