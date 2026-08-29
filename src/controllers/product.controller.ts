@@ -122,7 +122,7 @@ productController.createNewProduct = async (req: AdminRequest, res: Response) =>
 	}
 };
 
-productController.updateChosenProduct = async (req: Request, res: Response) => {
+productController.updateChosenProduct = async (req: AdminRequest, res: Response) => {
 	try {
 		const id = req.params.id;
 		const {
@@ -143,6 +143,13 @@ productController.updateChosenProduct = async (req: Request, res: Response) => {
 		if (productCollection !== undefined) input.productCollection = productCollection;
 		if (brandCollection !== undefined) input.brandCollection = brandCollection;
 		if (productStatus !== undefined) input.productStatus = productStatus;
+
+		// The route's multer middleware parses new image uploads into req.files
+		// (field name "productImage"). Only overwrite productImages when a new
+		// file was actually submitted, otherwise keep the product's existing images.
+		if (req.files?.length) {
+			input.productImages = req.files.map((ele) => ele.path.replace(/\\/g, '/'));
+		}
 
 		const result = await productService.updateChosenProduct(id, input as ProductUpdateInput);
 		res.status(HttpCode.OK).json({ data: result });
