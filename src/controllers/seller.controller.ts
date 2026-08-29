@@ -40,6 +40,11 @@ sellerController.processSignup = async (req: AdminRequest, res: Response) => {
 		const file = req.file;
 		if (!file) throw new Errors(HttpCode.BAD_REQUEST, Message.SOMETHING_WENT_WRONG);
 
+		const bootstrapToken = process.env.ADMIN_SIGNUP_TOKEN;
+		if (!bootstrapToken || req.body.adminSignupToken !== bootstrapToken) {
+			throw new Errors(HttpCode.FORBIDDEN, Message.SOMETHING_WENT_WRONG);
+		}
+
 		const newMember: MemberInput = req.body;
 		newMember.memberImage = file?.path;
 		newMember.memberType = MemberType.SELLER;
