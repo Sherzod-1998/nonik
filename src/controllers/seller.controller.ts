@@ -2,7 +2,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { T } from '../libs/types/common';
 import MemberService from '../models/Member.service';
-import { AdminRequest, LoginInput, MemberInput } from '../libs/types/member';
+import { AdminRequest, LoginInput, MemberInput, MemberUpdateInput } from '../libs/types/member';
 import { MemberType } from '../libs/enums/member.enum';
 import Errors, { HttpCode, Message } from '../libs/Errors';
 
@@ -97,7 +97,16 @@ sellerController.getUsers = async (req: Request, res: Response) => {
 
 sellerController.updateChosenUser = async (req: Request, res: Response) => {
 	try {
-		const result = await memberService.updateChosenUser(req.body);
+		const { _id, memberNick, memberPhone, memberAddress, memberDesc, memberStatus } = req.body;
+
+		const input: MemberUpdateInput = { _id };
+		if (memberNick !== undefined) input.memberNick = memberNick;
+		if (memberPhone !== undefined) input.memberPhone = memberPhone;
+		if (memberAddress !== undefined) input.memberAddress = memberAddress;
+		if (memberDesc !== undefined) input.memberDesc = memberDesc;
+		if (memberStatus !== undefined) input.memberStatus = memberStatus;
+
+		const result = await memberService.updateChosenUser(input);
 
 		res.status(HttpCode.OK).json({ data: result });
 	} catch (err) {
