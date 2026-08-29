@@ -1,0 +1,24 @@
+<nav class="admin-nav">
+  <div class="admin-nav-container">
+    <a class="admin-nav-logo" href="/admin">NONIK</a>
+    <% if (typeof member !== 'undefined' && member) { %>
+      <div class="admin-nav-links">
+        <a href="/admin">Dashboard</a>
+        <a href="/admin/product/all">Products</a>
+        <a href="/admin/user/all">Users</a>
+        <a href="/admin/orders">Orders</a>
+        <a
+          class="admin-nav-logout"
+          href="/admin/logout"
+          style="cursor: pointer"
+          onclick="return confirm('Do you want to logout?')"
+        >Logout</a>
+      </div>
+    <% } else { %>
+      <div class="admin-nav-links">
+        <a href="/admin/login">Login</a>
+        <a class="admin-nav-cta" href="/admin/signup">Signup</a>
+      </div>
+    <% } %>
+  </div>
+</nav>

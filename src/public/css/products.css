@@ -1,35 +1,17 @@
 .products-container {
   position: relative;
   width: auto;
-  height: auto;
-  min-height: 100%;
+  min-height: calc(100% - 74px);
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: linear-gradient(to top, #e37813 0%, #000000 100%);
-
+  background: var(--nonik-page-bg);
+  font-family: 'Poppins', sans-serif;
 }
 
 .products-container a {
   text-decoration: none;
-  color: #000000;
-}
-
-.products-container .nav-item a {
-  color: #e3c08d;
-}
-
-.products-container .nav-item a.disabled {
-  color: #898071;
-}
-
-.products-container .navigation-menu {
-  position: absolute;
-  z-index: 10000;
-  top: 1%;
-  color: #efefee;
-  font-size: 40px;
-  font-family: monospace;
+  color: var(--nonik-text-dark);
 }
 
 .products-container .restaurant-menu-frame {
@@ -45,8 +27,9 @@
 
 .products-container .restaurant-menu-frame .board {
   position: relative;
-  margin-top: 100px;
+  margin-top: 50px;
   width: 1320px;
+  max-width: 100%;
   height: auto;
   display: flex;
   flex-direction: column;
@@ -76,12 +59,26 @@
 }
 
 .products-container .new-dish-txt {
-  font-family: "Source Serif Pro";
+  font-family: "Playfair Display", serif;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 700;
   font-size: 30px;
-  line-height: 25px;
-  color: #ffffff;
+  line-height: 1.3;
+  color: var(--nonik-text-dark);
+}
+
+.products-container table {
+  background: var(--nonik-card-bg);
+  border: 1px solid var(--nonik-card-border);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.products-container .thead-light th {
+  background: var(--nonik-page-bg);
+  color: var(--nonik-text-dark);
+  font-weight: 600;
 }
 
 .products-container .long-input {
@@ -94,12 +91,12 @@
 }
 
 .products-container .long-input label {
-  font-family: "Source Serif Pro";
+  font-family: "Poppins", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
   line-height: 25px;
-  color: #ffffff;
+  color: var(--nonik-text-dark);
 }
 
 .products-container .long-input input {
@@ -109,15 +106,16 @@
   width: 100%;
   height: 54px;
   border: none;
-  background: #f7f7f7;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  background: var(--nonik-page-bg);
+  border: 1px solid var(--nonik-card-border);
+  box-shadow: none;
   border-radius: 5px;
-  font-family: "GT Walsheim Pro";
+  font-family: "Poppins", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 15px;
   line-height: 26px;
-  color: #4f547b;
+  color: var(--nonik-text-dark);
 }
 
 .products-container .long-input textarea {
@@ -127,15 +125,16 @@
   width: 100%;
   height: 200px;
   border: none;
-  background: #f7f7f7;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  background: var(--nonik-page-bg);
+  border: 1px solid var(--nonik-card-border);
+  box-shadow: none;
   border-radius: 5px;
-  font-family: "GT Walsheim Pro";
+  font-family: "Poppins", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 15px;
   line-height: 26px;
-  color: #4f547b;
+  color: var(--nonik-text-dark);
 }
 
 .products-container .half-input select {
@@ -146,15 +145,16 @@
   height: 55px;
   display: flex;
   border: none;
-  background: #f7f7f7;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  background: var(--nonik-page-bg);
+  border: 1px solid var(--nonik-card-border);
+  box-shadow: none;
   border-radius: 5px;
-  font-family: "GT Walsheim Pro";
+  font-family: "Poppins", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 15px;
   line-height: 26px;
-  color: #4f547b;
+  color: var(--nonik-text-dark);
 }
 
 .products-container select:focus {
@@ -170,15 +170,16 @@
   height: 55px;
   display: flex;
   border: none;
-  background: #f7f7f7;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  background: var(--nonik-page-bg);
+  border: 1px solid var(--nonik-card-border);
+  box-shadow: none;
   border-radius: 5px;
-  font-family: "GT Walsheim Pro";
+  font-family: "Poppins", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 15px;
   line-height: 26px;
-  color: #4f547b;
+  color: var(--nonik-text-dark);
 }
 
 .products-container .dish-container .half-input-frame {
@@ -200,12 +201,12 @@
 }
 
 .products-container .half-input label {
-  font-family: "Source Serif Pro";
+  font-family: "Poppins", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
   line-height: 25px;
-  color: #ffffff;
+  color: var(--nonik-text-dark);
 }
 
 .products-container .half-input input {
@@ -215,8 +216,9 @@
   width: 100%;
   height: 54px;
   border: none;
-  background: #f7f7f7;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  background: var(--nonik-page-bg);
+  border: 1px solid var(--nonik-card-border);
+  box-shadow: none;
   border-radius: 5px;
 }
 
@@ -258,12 +260,12 @@
 
 .products-container .img-frame label {
   margin-top: 30px;
-  font-family: "Source Serif Pro";
+  font-family: "Poppins", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
   line-height: 25px;
-  color: #ffffff;
+  color: var(--nonik-text-dark);
 }
 
 .products-container #file {
@@ -294,12 +296,12 @@
   background: #ffffff;
   border: 1px solid #dddddd;
   border-radius: 8px;
-  font-family: "GT Walsheim Pro";
+  font-family: "Poppins", sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 15px;
   line-height: 26px;
-  color: #4f547b;
+  color: var(--nonik-text-dark);
 }
 
 .products-container table td,

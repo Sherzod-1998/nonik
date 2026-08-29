@@ -3,6 +3,7 @@
 <link rel="stylesheet" type="text/css" href="/css/signup.css" />
 
 <body>
+  <%- include('includes/nav', { member: member }) %>
   <div class="signup-container">
     <form onsubmit="return validateSignupForm()" action="/admin/signup" method="POST" enctype="multipart/form-data">
       <input type="hidden" name="csrfToken" value="<%= csrfToken %>">

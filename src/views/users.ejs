@@ -3,48 +3,14 @@
 <link rel="stylesheet" type="text/css" href="/css/users.css" />
 
 <body data-csrf="<%= csrfToken %>">
+  <%- include('includes/nav', { member: member }) %>
   <div class="users-container">
     <% if(!member) { %>
-    <div class="navigation-menu">
-      <ul class="nav justify-content-center">
-        <li class="nav-item" style="cursor: pointer">
-          <a class="nav-link active" href="/admin/">Home</a>
-        </li>
-        <li class="nav-item" style="cursor: pointer">
-          <a class="nav-link" href="/admin/signup">SignUp</a>
-        </li>
-        <li class="nav-item" style="cursor: pointer">
-          <a class="nav-link" href="/admin/login">Login</a>
-        </li>
-      </ul>
-    </div>
-
     <div class="users-frame" style="color: #dddddd">
       <div class="board" style="font-size: 40px">Please login first!</div>
     </div>
 
     <% } else { %>
-    <div class="navigation-menu">
-      <ul class="nav justify-content-center">
-        <li class="nav-item" style="cursor: pointer">
-          <a class="nav-link active" href="/admin/">Home</a>
-        </li>
-        <li class="nav-item" style="cursor: pointer">
-          <a class="nav-link" href="/admin/product/all">Menu</a>
-        </li>
-        <li class="nav-item" style="cursor: pointer">
-          <a class="nav-link" href="/admin/user/all">Users</a>
-        </li>
-        <li
-          class="nav-item"
-          style="cursor: pointer"
-          onclick="return confirm('Do you really want to logout?')"
-        >
-          <a class="nav-link" href="/admin/logout">Logout</a>
-        </li>
-      </ul>
-    </div>
-
     <div class="users-frame">
       <div class="board">
         <div class="user-table">

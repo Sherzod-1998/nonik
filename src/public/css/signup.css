@@ -2,19 +2,21 @@
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
-  background: linear-gradient(120deg, #f6d365, #fda085);
-  height: 100vh;
+  background: var(--nonik-bg);
+  min-height: calc(100vh - 74px);
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 40px 0;
 }
 
 .signup-container {
   width: 700px;
-  background: #fff;
-  border-radius: 20px;
+  background: var(--nonik-card-bg);
+  border: 1px solid var(--nonik-card-border);
+  border-radius: 12px;
   padding: 40px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
 }
 
 .signup-top {
@@ -23,18 +25,25 @@ body {
 }
 
 .signup-top span {
+  font-family: 'Playfair Display', serif;
   font-size: 28px;
-  font-weight: bold;
-  color: #6a7a99;
+  font-weight: 700;
+  color: var(--nonik-text-dark);
 }
 
 .signup-top p {
   margin-top: 10px;
   font-size: 14px;
+  color: var(--nonik-text-muted);
+}
+
+.signup-top div {
+  color: var(--nonik-text-muted);
 }
 
 .signup-top a {
-  color: #6a7a99;
+  color: var(--nonik-gold) !important;
+  font-weight: 600;
   text-decoration: none;
 }
 
@@ -54,14 +63,22 @@ body {
 .sign-up-frame label {
   font-weight: 500;
   margin-bottom: 5px;
+  color: var(--nonik-text-dark);
 }
 
 .sign-up-frame input {
   padding: 14px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--nonik-card-border);
   border-radius: 10px;
   font-size: 14px;
-  background: #f9f9f9;
+  font-family: 'Poppins', sans-serif;
+  background: var(--nonik-page-bg);
+}
+
+.sign-up-frame input:focus {
+  outline: none;
+  border-color: var(--nonik-gold);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
 }
 
 .media-frame {
@@ -89,6 +106,7 @@ body {
   font-size: 16px;
   font-weight: 500;
   margin-bottom: 10px;
+  color: var(--nonik-text-dark);
 }
 
 .file-box {
@@ -99,19 +117,27 @@ body {
 .upload-name {
   flex: 1;
   padding: 12px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--nonik-card-border);
   border-radius: 10px 0 0 10px;
-  background-color: #fff;
+  background-color: var(--nonik-card-bg);
   font-size: 14px;
+  font-family: 'Poppins', sans-serif;
 }
 
 .file-input-label {
   padding: 12px 20px;
-  background-color: #6a7a99;
-  color: #fff;
+  background: linear-gradient(135deg, var(--nonik-gold-soft), var(--nonik-gold));
+  color: var(--nonik-text-dark);
+  font-weight: 600;
   border-radius: 0 10px 10px 0;
   cursor: pointer;
   font-size: 14px;
+  transition: box-shadow 200ms ease-in-out, background 200ms ease-in-out;
+}
+
+.file-input-label:hover {
+  background: linear-gradient(135deg, var(--nonik-gold-bright), var(--nonik-gold));
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
 }
 
 .file-box input[type="file"] {
@@ -120,22 +146,25 @@ body {
 
 .thumbnail-desc {
   font-size: 12px;
-  color: #666;
+  color: var(--nonik-text-muted);
   margin-top: 10px;
 }
 
 .signup-btn {
   width: 100%;
   padding: 14px;
-  background-color: #6a7a99;
+  background: linear-gradient(135deg, var(--nonik-gold-soft), var(--nonik-gold));
   border: none;
-  color: white;
+  color: var(--nonik-text-dark);
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
   border-radius: 12px;
   font-size: 16px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: box-shadow 200ms ease-in-out, background 200ms ease-in-out;
 }
 
 .signup-btn:hover {
-  background-color: #554fa1;
+  background: linear-gradient(135deg, var(--nonik-gold-bright), var(--nonik-gold));
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
 }

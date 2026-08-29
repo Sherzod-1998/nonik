@@ -3,6 +3,7 @@
 <link rel="stylesheet" type="text/css" href="/css/login.css" />
 
 <body>
+  <%- include('includes/nav', { member: member }) %>
   <form class="login-container" action="/admin/login" METHOD="POST">
     <input type="hidden" name="csrfToken" value="<%= csrfToken %>">
     <div class="login-frame">

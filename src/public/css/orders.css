@@ -1,7 +1,6 @@
-.users-container {
+.orders-container {
   position: relative;
   width: auto;
-  min-width: 100%;
   min-height: calc(100% - 74px);
   display: flex;
   flex-direction: column;
@@ -10,12 +9,12 @@
   font-family: 'Poppins', sans-serif;
 }
 
-.users-container a {
+.orders-container a {
   text-decoration: none;
   color: var(--nonik-text-dark);
 }
 
-.users-container .users-frame {
+.orders-container .restaurant-menu-frame {
   position: relative;
   padding-bottom: 80px;
   width: 100%;
@@ -26,7 +25,7 @@
   align-items: center;
 }
 
-.users-container .users-frame .board {
+.orders-container .restaurant-menu-frame .board {
   position: relative;
   margin-top: 50px;
   width: 1320px;
@@ -37,7 +36,7 @@
   align-items: center;
 }
 
-.users-container .board .dishes-table {
+.orders-container .board .dishes-table {
   position: relative;
   width: 100%;
   height: auto;
@@ -47,17 +46,7 @@
   align-items: center;
 }
 
-.users-container .board .user-table {
-  position: relative;
-  width: 85%;
-  height: auto;
-  margin-top: 30px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.users-container .header-name {
+.orders-container .new-dish-txt {
   font-family: "Playfair Display", serif;
   font-style: normal;
   font-weight: 700;
@@ -66,12 +55,16 @@
   color: var(--nonik-text-dark);
 }
 
-.users-container select:focus {
-  min-width: 90%;
-  width: auto;
+.orders-container .long-input {
+  position: relative;
+  margin-top: 25px;
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
 }
 
-.users-container table {
+.orders-container table {
   background: var(--nonik-card-bg);
   border: 1px solid var(--nonik-card-border);
   border-radius: 12px;
@@ -79,16 +72,21 @@
   overflow: hidden;
 }
 
-.users-container .thead-light th {
+.orders-container .thead-light th {
   background: var(--nonik-page-bg);
   color: var(--nonik-text-dark);
   font-weight: 600;
 }
 
-.users-container .spec-select {
+.orders-container table td,
+table th {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.orders-container .spec-select {
   position: relative;
   padding: 0px 7px;
-  /*width: 100%;*/
   height: 27px;
   background: var(--nonik-card-bg);
   border: 1px solid var(--nonik-card-border);
@@ -99,10 +97,4 @@
   font-size: 15px;
   line-height: 26px;
   color: var(--nonik-text-dark);
-}
-
-.users-container table td,
-table th {
-  text-align: center;
-  vertical-align: middle;
 }
