@@ -51,6 +51,22 @@
           <span class="header-name" style="margin-bottom: 30px"
             >All Users List</span
           >
+          <form
+            action="/admin/user/all"
+            method="GET"
+            class="long-input"
+            style="flex-direction: row; align-items: center; gap: 10px; margin-bottom: 20px"
+          >
+            <input
+              type="text"
+              name="search"
+              placeholder="Search by nickname"
+              value="<%= search %>"
+              class="form-control"
+              style="max-width: 300px"
+            />
+            <button type="submit" class="btn btn-primary">Search</button>
+          </form>
           <table class="table table-hover table-sm">
             <thead class="thead-light">
               <tr class="thead-light">
@@ -86,6 +102,29 @@
             <% }) %> 
             <!--  LOOP PRODUCTS: END  -->
           </table>
+          <nav
+            class="long-input"
+            style="flex-direction: row; justify-content: center; gap: 8px; margin-bottom: 25px"
+          >
+            <% if (page > 1) { %>
+              <a
+                class="btn btn-secondary"
+                href="/admin/user/all?page=<%= page - 1 %>&search=<%= search %>"
+              >Prev</a>
+            <% } %>
+            <% for (let i = 1; i <= totalPages; i++) { %>
+              <a
+                class="btn <%= i === page ? 'btn-primary' : 'btn-outline-primary' %>"
+                href="/admin/user/all?page=<%= i %>&search=<%= search %>"
+              ><%= i %></a>
+            <% } %>
+            <% if (page < totalPages) { %>
+              <a
+                class="btn btn-secondary"
+                href="/admin/user/all?page=<%= page + 1 %>&search=<%= search %>"
+              >Next</a>
+            <% } %>
+          </nav>
         </div>
       </div>
     </div>

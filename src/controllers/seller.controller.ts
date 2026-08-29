@@ -92,8 +92,13 @@ sellerController.logout = async (req: AdminRequest, res: Response) => {
 
 sellerController.getUsers = async (req: Request, res: Response) => {
 	try {
-		const result = await memberService.getUsers();
-		res.render('users', { users: result });
+		const page = req.query.page ? Number(req.query.page) : 1;
+		const search = req.query.search ? String(req.query.search) : '';
+
+		const { users, total } = await memberService.getUsers(page, search);
+		const totalPages = Math.max(Math.ceil(total / 10), 1);
+
+		res.render('users', { users, total, page, totalPages, search });
 	} catch (err) {
 		console.log('Error, getUsers:', err);
 		res.redirect('/admin/login');

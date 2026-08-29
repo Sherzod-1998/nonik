@@ -1,6 +1,7 @@
 import { ObjectId } from 'mongoose';
 import MemberModel from '../schema/Member.model';
 import { LoginInput, Member, MemberInput, MemberUpdateInput } from '../libs/types/member';
+import { T } from '../libs/types/common';
 import Errors, { HttpCode, Message } from '../libs/Errors';
 import { MemberStatus, MemberType } from '../libs/enums/member.enum';
 import * as bcrypt from 'bcryptjs';
@@ -91,11 +92,26 @@ class MemberService {
 
 		return result;
 	}
-	public async getUsers(): Promise<Member[]> {
-		const result = await this.memberModel.find({ memberType: MemberType.USER }).exec();
+	public async getUsers(page = 1, search?: string): Promise<{ users: Member[]; total: number }> {
+		const limit = 10;
+		const match: T = { memberType: MemberType.USER };
 
-		if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
-		return result;
+		if (search) {
+			match.memberNick = { $regex: new RegExp(search, 'i') };
+		}
+
+		const [users, total] = await Promise.all([
+			this.memberModel
+				.find(match)
+				.sort({ createdAt: -1 })
+				.skip((page - 1) * limit)
+				.limit(limit)
+				.exec(),
+			this.memberModel.countDocuments(match).exec(),
+		]);
+
+		if (!users) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+		return { users, total };
 	}
 
 	public async updateChosenUser(input: MemberUpdateInput): Promise<Member[]> {
