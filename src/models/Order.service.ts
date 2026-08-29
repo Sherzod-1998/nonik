@@ -179,12 +179,18 @@ class OrderService {
 		const orderId = shapeIntoMongooseObjectId(input.orderId);
 		const orderStatus = input.orderStatus;
 
+		// Points faqat status haqiqatan ham boshqa holatdan PROCESS'ga o'tganda beriladi,
+		// aks holda foydalanuvchi bir xil statusni qayta-qayta yuborib point yig'ib olishi mumkin
+		const existingOrder = await this.orderModel.findOne({ memberId: memberId, _id: orderId }).exec();
+		if (!existingOrder) throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
+		const currentStatus = existingOrder.orderStatus;
+
 		const result = await this.orderModel
 			.findOneAndUpdate({ memberId: memberId, _id: orderId }, { orderStatus: orderStatus }, { new: true })
 			.exec();
 
 		if (!result) throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
-		if (orderStatus === OrderStatus.PROCESS) {
+		if (orderStatus === OrderStatus.PROCESS && currentStatus !== OrderStatus.PROCESS) {
 			await this.memberService.addUserPoint(member, 1);
 		}
 		return result;
