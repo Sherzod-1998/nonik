@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { T } from '../libs/types/common';
 import ProductService from '../models/Product.service';
 import { AdminRequest, ExtendedRequest } from '../libs/types/member';
-import { ProductInput, ProductInquiry } from '../libs/types/product';
+import { ProductInput, ProductInquiry, ProductUpdateInput } from '../libs/types/product';
 import { BrandCollection, ProductCollection } from '../libs/enums/product.enum';
 
 const productService = new ProductService();
@@ -125,7 +125,26 @@ productController.createNewProduct = async (req: AdminRequest, res: Response) =>
 productController.updateChosenProduct = async (req: Request, res: Response) => {
 	try {
 		const id = req.params.id;
-		const result = await productService.updateChosenProduct(id, req.body);
+		const {
+			productName,
+			productPrice,
+			productLeftCount,
+			productDesc,
+			productCollection,
+			brandCollection,
+			productStatus,
+		} = req.body;
+
+		const input: Partial<ProductUpdateInput> = {};
+		if (productName !== undefined) input.productName = productName;
+		if (productPrice !== undefined) input.productPrice = productPrice;
+		if (productLeftCount !== undefined) input.productLeftCount = productLeftCount;
+		if (productDesc !== undefined) input.productDesc = productDesc;
+		if (productCollection !== undefined) input.productCollection = productCollection;
+		if (brandCollection !== undefined) input.brandCollection = brandCollection;
+		if (productStatus !== undefined) input.productStatus = productStatus;
+
+		const result = await productService.updateChosenProduct(id, input as ProductUpdateInput);
 		res.status(HttpCode.OK).json({ data: result });
 	} catch (err) {
 		console.log('Error updateChosenProduct', err);
