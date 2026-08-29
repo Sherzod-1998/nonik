@@ -5,6 +5,7 @@ import { ExtendedRequest, LoginInput, Member, MemberInput, MemberUpdateInput } f
 import Errors, { HttpCode, Message } from '../libs/Errors';
 import AuthService from '../models/Auth.service';
 import { AUTH_TIMER } from '../libs/config';
+import { MemberType } from '../libs/enums/member.enum';
 
 const memberService = new MemberService();
 const authService = new AuthService();
@@ -32,8 +33,14 @@ memberController.getSeller = async (req: Request, res: Response) => {
 
 memberController.signup = async (req: Request, res: Response) => {
 	try {
-		const input: MemberInput = req.body,
-			result: Member = await memberService.signup(input);
+		const { memberNick, memberPhone, memberPassword } = req.body;
+		const input: MemberInput = {
+			memberNick,
+			memberPhone,
+			memberPassword,
+			memberType: MemberType.USER,
+		};
+		const result: Member = await memberService.signup(input);
 		const token = await authService.createToken(result);
 		res.cookie('accessToken', token, {
 			...accessTokenCookieOptions,
