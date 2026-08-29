@@ -13,7 +13,7 @@
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\""
   },
   "author": "Sherzod-1998",
-  "license": "ISC",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/Sherzod-1998/nonik.git"

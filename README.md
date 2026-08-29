@@ -125,10 +125,14 @@ The admin panel lives at `/admin`, is session-based (not JWT), and is intended f
 
 ## Deployment
 
-A PM2 process config (`process.config.js`) and a sample `deploy.sh` script are included for production process management, but the project is not currently deployed live anywhere. Deployment: coming soon.
+Live at [api.nonik.uz](https://api.nonik.uz) (admin panel: [api.nonik.uz/admin](https://api.nonik.uz/admin)) — an EC2 instance running the app under PM2 (`process.config.js`) behind nginx, with file uploads served from S3 and HTTPS via Let's Encrypt. Deploys to `master` run automatically through GitHub Actions (`.github/workflows/ci-cd.yml`), using GitHub OIDC to authenticate to AWS without static credentials.
+
+## Screenshots
+
+![Admin panel](docs/screenshots/admin-login.png)
 
 ## License / Author
 
-Built by [Sherzod-1998](https://github.com/Sherzod-1998).
+MIT — see [LICENSE](./LICENSE). Built by [Sherzod-1998](https://github.com/Sherzod-1998).
 
 Frontend companion repo: [nonik-react](https://github.com/Sherzod-1998/nonik-react)
