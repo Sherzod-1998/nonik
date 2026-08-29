@@ -100,7 +100,11 @@ Create a `.env` file (and optionally a `.env.production` for production, loaded 
 | `CLIENT_ORIGIN` | Comma-separated list of allowed CORS origins for the public API (defaults to `http://localhost:3000`) |
 | `ADMIN_SIGNUP_TOKEN` | Bootstrap token required to self-register as a seller via `/admin/signup` |
 | `PORT` | Port the server listens on (defaults to `3003`) |
-| `NODE_ENV` | `development` or `production` — toggles secure cookies, `.env` vs `.env.production`, and log verbosity |
+| `NODE_ENV` | `development` or `production` — toggles secure cookies, `.env` vs `.env.production`, log verbosity, and file upload storage backend (see below) |
+| `S3_BUCKET_NAME` | **Production only.** S3 bucket file uploads are written to (e.g. `nonik-uploads-205930613434`) |
+| `AWS_REGION` | **Production only.** Region of the S3 bucket above (e.g. `ap-northeast-2`) |
+
+File uploads (`src/libs/utils/uploader.ts`) write to local disk (`./uploads/{category}/`) in development, and directly to S3 (under the `uploads/{category}/` key prefix) in production. In production, the AWS SDK authenticates via the host's IAM role — no AWS access keys are needed or should be added here.
 
 ### Run in development
 

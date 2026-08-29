@@ -1,10 +1,30 @@
 import path from 'path';
 import multer from 'multer';
+import multerS3 from 'multer-s3';
+import { S3Client } from '@aws-sdk/client-s3';
 import { v4 } from 'uuid';
 
 // multer image uploader
 
+// In production, uploads go straight to S3 (bucket configured via S3_BUCKET_NAME,
+// e.g. "nonik-uploads-205930613434"). Auth relies on the EC2 instance's IAM role
+// (default AWS SDK credential provider chain) — no static access keys here.
+const s3Client = new S3Client({ region: process.env.AWS_REGION || 'ap-northeast-2' });
+
 function getTargetImageStorage(addres: any) {
+	if (process.env.NODE_ENV === 'production') {
+		return multerS3({
+			s3: s3Client,
+			bucket: process.env.S3_BUCKET_NAME as string,
+			contentType: multerS3.AUTO_CONTENT_TYPE,
+			key: function (req, file, cb) {
+				const extension = path.parse(file.originalname).ext;
+				const random_name = v4() + extension;
+				cb(null, `uploads/${addres}/${random_name}`);
+			},
+		});
+	}
+
 	return multer.diskStorage({
 		destination: function (req, file, cb) {
 			cb(null, `./uploads/${addres}`);
