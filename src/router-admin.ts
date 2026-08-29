@@ -5,6 +5,7 @@ import productController from './controllers/product.controller';
 import sellerController from './controllers/seller.controller';
 import orderController from './controllers/order.controller';
 import makeUploader from './libs/utils/uploader';
+import { createRateLimiter } from './libs/utils/rateLimiter';
 import { T } from './libs/types/common';
 
 /** CSRF PROTECTION **/
@@ -18,29 +19,11 @@ function verifyCsrf(req: express.Request, res: express.Response, next: express.N
 }
 
 /** LOGIN RATE LIMITING **/
-const loginAttempts = new Map<string, { count: number; resetAt: number }>();
-const LOGIN_RATE_LIMIT_WINDOW = 1000 * 60 * 10; // 10 minutes
-const LOGIN_RATE_LIMIT_MAX = 5;
-
-function loginRateLimiter(req: express.Request, res: express.Response, next: express.NextFunction) {
-    const key = req.ip ?? 'unknown';
-    const now = Date.now();
-    const entry = loginAttempts.get(key);
-
-    if (!entry || entry.resetAt < now) {
-        loginAttempts.set(key, { count: 1, resetAt: now + LOGIN_RATE_LIMIT_WINDOW });
-        next();
-        return;
-    }
-
-    if (entry.count >= LOGIN_RATE_LIMIT_MAX) {
-        res.status(429).json({ message: 'Too many login attempts, please try again later.' });
-        return;
-    }
-
-    entry.count += 1;
-    next();
-}
+const loginRateLimiter = createRateLimiter({
+    windowMs: 10 * 60 * 1000,
+    max: 5,
+    message: 'Too many login attempts, please try again later.',
+});
 
 /* Seller */
 routerAdmin.get('/', orderController.getDashboard);
