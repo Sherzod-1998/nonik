@@ -4,6 +4,7 @@
 
 <body>
   <form class="login-container" action="/admin/login" METHOD="POST">
+    <input type="hidden" name="csrfToken" value="<%= csrfToken %>">
     <div class="login-frame">
       <div class="login-top">
         <span>Enter</span>

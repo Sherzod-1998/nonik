@@ -2,7 +2,7 @@
 
 <link rel="stylesheet" type="text/css" href="/css/products.css" />
 
-<body>
+<body data-csrf="<%= csrfToken %>">
   <div class="products-container">
     <div class="navigation-menu">
       <ul class="nav justify-content-center">
@@ -100,6 +100,7 @@
           class="dish-container"
           enctype="multipart/form-data"
           >
+          <input type="hidden" name="csrfToken" value="<%= csrfToken %>">
           <div class="long-input" style="display: flex; align-items: center">
             <span class="new-dish-txt">NEW PRODUCT DETAIL</span>
           </div>

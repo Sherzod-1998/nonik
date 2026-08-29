@@ -26,7 +26,8 @@ $(function () {
 		const productStatus = $(`#${id}.new-product-status`).val();
 
 		try {
-			const response = await axios.post(`/admin/product/${id}`, { productStatus: productStatus });
+			const csrfToken = document.body.dataset.csrf;
+			const response = await axios.post(`/admin/product/${id}`, { productStatus: productStatus, csrfToken: csrfToken });
 			console.log('response:', response);
 			const result = response.data;
 			if (result.data) {

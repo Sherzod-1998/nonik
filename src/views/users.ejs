@@ -2,7 +2,7 @@
 
 <link rel="stylesheet" type="text/css" href="/css/users.css" />
 
-<body>
+<body data-csrf="<%= csrfToken %>">
   <div class="users-container">
     <% if(!member) { %>
     <div class="navigation-menu">
