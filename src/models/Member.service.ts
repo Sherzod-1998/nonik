@@ -86,11 +86,7 @@ class MemberService {
 			.limit(4)
 			.exec();
 
-		if (result.length === 0) {
-			throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
-		}
-
-		return result;
+		return result ?? [];
 	}
 	public async getUsers(page = 1, search?: string): Promise<{ users: Member[]; total: number }> {
 		const limit = 10;
