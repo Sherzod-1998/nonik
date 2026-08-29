@@ -14,7 +14,7 @@
   color: var(--nonik-text-dark);
 }
 
-.orders-container .restaurant-menu-frame {
+.orders-container .page-frame {
   position: relative;
   padding-bottom: 80px;
   width: 100%;
@@ -25,7 +25,7 @@
   align-items: center;
 }
 
-.orders-container .restaurant-menu-frame .board {
+.orders-container .page-frame .board {
   position: relative;
   margin-top: 50px;
   width: 1320px;
@@ -36,7 +36,7 @@
   align-items: center;
 }
 
-.orders-container .board .dishes-table {
+.orders-container .board .content-board {
   position: relative;
   width: 100%;
   height: auto;
@@ -46,7 +46,7 @@
   align-items: center;
 }
 
-.orders-container .new-dish-txt {
+.orders-container .section-title {
   font-family: "Playfair Display", serif;
   font-style: normal;
   font-weight: 700;
