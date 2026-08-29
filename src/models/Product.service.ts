@@ -117,10 +117,26 @@ class ProductService {
 		}
 	}
 
-	public async getAllProducts(): Promise<Product[]> {
-		const result = await this.productModel.find().exec();
-		if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
-		return result;
+	public async getAllProducts(page = 1, search?: string): Promise<{ products: Product[]; total: number }> {
+		const limit = 10;
+		const match: T = {};
+
+		if (search) {
+			match.productName = { $regex: new RegExp(search, 'i') };
+		}
+
+		const [products, total] = await Promise.all([
+			this.productModel
+				.find(match)
+				.sort({ createdAt: -1 })
+				.skip((page - 1) * limit)
+				.limit(limit)
+				.exec(),
+			this.productModel.countDocuments(match).exec(),
+		]);
+
+		if (!products) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+		return { products, total };
 	}
 	public async updateChosenProduct(id: string, input: ProductUpdateInput): Promise<Product> {
 		// string => objectId
