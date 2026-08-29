@@ -5,12 +5,26 @@ import productController from './controllers/product.controller';
 import orderController from './controllers/order.controller';
 import favoriteController from './controllers/favorite.controller';
 import contactController from './controllers/contact.controller';
+import { createRateLimiter } from './libs/utils/rateLimiter';
 const router = express.Router();
+
+/** LOGIN / SIGNUP RATE LIMITING **/
+const loginRateLimiter = createRateLimiter({
+	windowMs: 10 * 60 * 1000, // 10 minutes
+	max: 5,
+	message: 'Too many login attempts, please try again later.',
+});
+
+const signupRateLimiter = createRateLimiter({
+	windowMs: 60 * 60 * 1000, // 1 hour
+	max: 10,
+	message: 'Too many signup attempts, please try again later.',
+});
 
 /** Member */
 router.get('/member/seller', memberController.getSeller);
-router.post('/member/login', memberController.login);
-router.post('/member/signup', memberController.signup);
+router.post('/member/login', loginRateLimiter, memberController.login);
+router.post('/member/signup', signupRateLimiter, memberController.signup);
 router.post('/member/logout', memberController.verifyAuth, memberController.logout);
 router.get('/member/detail', memberController.verifyAuth, memberController.getMemberDetail);
 router.post(
