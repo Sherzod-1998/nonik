@@ -13,6 +13,7 @@ import ConnectMongoDB from 'connect-mongodb-session';
 import { T } from './libs/types/common';
 import { Server as SocketIOServer } from 'socket.io';
 import http from 'http';
+import crypto from 'crypto';
 
 const MongoDBStore = ConnectMongoDB(session);
 const store = new MongoDBStore({
@@ -44,10 +45,13 @@ app.use(
 		secret: String(process.env.SESSION_SECRET), // Maxfiy kalit
 		cookie: {
 			maxAge: 1000 * 3600 * 3, // 3hours
+			httpOnly: true,
+			sameSite: 'lax',
+			secure: process.env.NODE_ENV === 'production',
 		},
 		store: store, // Sessiyalarni saqlash uchun avval sozlangan MongoDBStore
-		resave: true, // Har bir so‘rovda sessiya qayta saqlanadi
-		saveUninitialized: true, // Bo‘sh sessiyalarni ham saqlaydi
+		resave: false, // Sessiya o'zgarmagan bo'lsa qayta saqlanmaydi
+		saveUninitialized: false, // Bo'sh sessiyalarni saqlamaydi
 	}),
 );
 
@@ -61,8 +65,18 @@ app.use(function (req, res, next) {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+/** CSRF TOKEN **/
+function csrfTokenMiddleware(req: express.Request, res: express.Response, next: express.NextFunction) {
+	const sessionInstance = req.session as T;
+	if (!sessionInstance.csrfToken) {
+		sessionInstance.csrfToken = crypto.randomBytes(24).toString('hex');
+	}
+	res.locals.csrfToken = sessionInstance.csrfToken;
+	next();
+}
+
 /** 4-ROUTERS **/
-app.use('/admin', routerAdmin);
+app.use('/admin', csrfTokenMiddleware, routerAdmin);
 app.use('/', router);
 
 const server = http.createServer(app);
