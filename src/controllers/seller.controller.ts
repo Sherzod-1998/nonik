@@ -118,19 +118,6 @@ sellerController.updateChosenUser = async (req: Request, res: Response) => {
 		}
 	}
 };
-sellerController.checkAuthSession = async (req: AdminRequest, res: Response) => {
-	try {
-		if (req.session?.member) {
-			res.send(`<script> alert(${JSON.stringify(req.session.member.memberNick)})</script>`);
-		} else {
-			res.send(`<script> alert(${JSON.stringify(Message.NOT_AUTHENTICATED)})</script>`);
-		}
-	} catch (err) {
-		console.log('Error, checkAuthSession:', err);
-		res.send(err);
-	}
-};
-
 sellerController.verifySeller = (req: AdminRequest, res: Response, next: NextFunction) => {
 	if (req.session?.member?.memberType === MemberType.SELLER) {
 		req.member = req.session.member;
