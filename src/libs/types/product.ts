@@ -48,7 +48,6 @@ export interface ProductUpdateInput {
 	productName: string;
 	productPrice: number;
 	productLeftCount: number;
-	productVolume: number;
 	productDesc?: string;
 	productImages: string[];
 	productView: number;
