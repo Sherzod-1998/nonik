@@ -24,6 +24,40 @@
       </div>
     </section>
     <!-- Hero Section END -->
+
+    <% if (member && stats) { %>
+      <section class="dashboard-stats">
+        <div class="stat-card">
+          <h3>Total Orders</h3>
+          <p><%= stats.totalOrders %></p>
+        </div>
+        <div class="stat-card">
+          <h3>Total Revenue</h3>
+          <p>$<%= stats.totalRevenue %></p>
+        </div>
+        <div class="stat-card">
+          <h3>Total Products</h3>
+          <p><%= stats.totalProducts %></p>
+        </div>
+        <div class="stat-card">
+          <h3>Total Users</h3>
+          <p><%= stats.totalUsers %></p>
+        </div>
+      </section>
+
+      <% if (stats.recentOrders && stats.recentOrders.length > 0) { %>
+        <section class="recent-orders">
+          <h2>Recent Orders</h2>
+          <ul>
+            <% stats.recentOrders.forEach(function (order) { %>
+              <li>
+                $<%= order.orderTotal %> - <%= order.orderStatus %> - <%= new Date(order.updatedAt).toLocaleString() %>
+              </li>
+            <% }) %>
+          </ul>
+        </section>
+      <% } %>
+    <% } %>
   </div>
 
   <script type="text/javascript" src="/js/home.js"></script>

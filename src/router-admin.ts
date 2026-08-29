@@ -43,7 +43,7 @@ function loginRateLimiter(req: express.Request, res: express.Response, next: exp
 }
 
 /* Seller */
-routerAdmin.get('/', sellerController.goHome);
+routerAdmin.get('/', orderController.getDashboard);
 
 routerAdmin
     .get('/login', sellerController.getLogin)

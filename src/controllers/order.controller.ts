@@ -1,10 +1,14 @@
-import { ExtendedRequest } from '../libs/types/member';
+import { AdminRequest, ExtendedRequest } from '../libs/types/member';
 import { T } from '../libs/types/common';
 import { Request, Response } from 'express';
 import Errors, { HttpCode } from '../libs/Errors';
 import OrderService from '../models/Order.service';
 import { OrderInquiry, OrderUpdateInput } from '../libs/types/order';
 import { OrderStatus } from '../libs/enums/order.enum';
+import OrderModel from '../schema/Order.model';
+import ProductModel from '../schema/Product.model';
+import MemberModel from '../schema/Member.model';
+import { MemberType } from '../libs/enums/member.enum';
 
 const orderService = new OrderService();
 const orderController: T = {};
@@ -90,6 +94,31 @@ orderController.adminUpdateOrderStatus = async (req: Request, res: Response) => 
 		} else {
 			res.status(Errors.standard.code).json(Errors.standard);
 		}
+	}
+};
+
+orderController.getDashboard = async (req: AdminRequest, res: Response) => {
+	try {
+		const [totalOrders, revenueResult, totalProducts, totalUsers, recentOrders] = await Promise.all([
+			OrderModel.countDocuments().exec(),
+			OrderModel.aggregate([
+				{ $match: { orderStatus: OrderStatus.FINISH } },
+				{ $group: { _id: null, total: { $sum: '$orderTotal' } } },
+			]).exec(),
+			ProductModel.countDocuments().exec(),
+			MemberModel.countDocuments({ memberType: MemberType.USER }).exec(),
+			OrderModel.find({}, { orderTotal: 1, orderStatus: 1, updatedAt: 1 }).sort({ updatedAt: -1 }).limit(5).exec(),
+		]);
+
+		const totalRevenue = revenueResult[0]?.total ?? 0;
+
+		res.render('home', {
+			member: req.session.member,
+			stats: { totalOrders, totalRevenue, totalProducts, totalUsers, recentOrders },
+		});
+	} catch (err) {
+		console.log('Error, getDashboard:', err);
+		res.render('home', { member: req.session.member, stats: null });
 	}
 };
 
