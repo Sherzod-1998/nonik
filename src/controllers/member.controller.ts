@@ -116,8 +116,15 @@ memberController.getMemberDetail = async (req: ExtendedRequest, res: Response) =
 
 memberController.updateMember = async (req: ExtendedRequest, res: Response) => {
 	try {
-		const input: MemberUpdateInput = req.body;
+		const { memberNick, memberPhone, memberAddress, memberDesc } = req.body;
+
+		const input: MemberUpdateInput = { _id: req.member._id };
+		if (memberNick !== undefined) input.memberNick = memberNick;
+		if (memberPhone !== undefined) input.memberPhone = memberPhone;
+		if (memberAddress !== undefined) input.memberAddress = memberAddress;
+		if (memberDesc !== undefined) input.memberDesc = memberDesc;
 		if (req.file) input.memberImage = req.file.path;
+
 		const result = await memberService.updateMember(req.member, input);
 
 		res.status(HttpCode.OK).json(result);
