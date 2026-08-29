@@ -7,11 +7,25 @@ import orderController from './controllers/order.controller';
 import makeUploader from './libs/utils/uploader';
 import { createRateLimiter } from './libs/utils/rateLimiter';
 import { T } from './libs/types/common';
+import fs from 'fs';
 
 /** CSRF PROTECTION **/
 function verifyCsrf(req: express.Request, res: express.Response, next: express.NextFunction) {
     const sessionInstance = req.session as T;
     if (req.body?.csrfToken !== sessionInstance.csrfToken) {
+        // Clean up any files multer already wrote to disk before rejecting the request.
+        const files: Express.Multer.File[] = req.file
+            ? [req.file]
+            : Array.isArray(req.files)
+              ? req.files
+              : req.files
+                ? Object.values(req.files).flat()
+                : [];
+        files.forEach((file) => {
+            if (file?.path) {
+                fs.unlink(file.path, () => {});
+            }
+        });
         res.status(403).json({ message: 'Invalid or missing CSRF token' });
         return;
     }
