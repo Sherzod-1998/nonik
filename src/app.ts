@@ -23,6 +23,7 @@ const store = new MongoDBStore({
 
 /** 1-ENTRANCE **/
 const app = express();
+app.set('trust proxy', 1); // behind nginx: honor X-Forwarded-Proto so secure cookies get set
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static('./uploads'));
